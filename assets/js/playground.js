@@ -105,8 +105,8 @@ function requestSaveDataFromSlot(slotIndex) {
         code_data: liveEditor.editor.getValue(),
         name_workspace: inputSlot.value,
         slot_index: slotIndex,
-        langage_name: liveEditor.getLangage(),
-        langage_extension: liveEditor.getLangagePretty()
+        langage_name: liveEditor.getLangageName(),
+        langage_extension: liveEditor.getLangageEditor()
     };
 
     // charge la fonction avec les paramètres (slotIndex, DataCode)

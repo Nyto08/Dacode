@@ -197,7 +197,7 @@ class CtrlDacode
             throw new \Exception(Message::INVALID_JSON_DATA);
         }
 
-        $langage = $this->daoPedacode->getLangageByName($workspaceData['langage_name']);
+        $langage = $this->daoPedacode->getLangageByName($workspaceData['langage_extension']);
 
         // le langage est invalide ou n'existe pas dans la bdd
         // if ($langage === null) { return ''; } // TODO : throw error

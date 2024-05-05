@@ -22,17 +22,11 @@ export class Editor {
     static modePath = "ace/mode/";
     static defaultTheme = "ace/theme/tomorrow_night_eighties";
 
-    // editor SyntaxMode supported by pedacode
+    // key/value : editor langage (editor SyntaxMode) / langage name
     static syntaxMode = {
-        html: "html",
-        css: "css",
-        javascript: "javascript",
-    };
-    // les clés ici bas doivent match les valeurs de syntaxMode
-    static syntaxPretty = {
-        html: "HTML",
-        css: "CSS",
-        javascript: "JavaScript",
+        "html": "HTML",
+        "css": "CSS",
+        "javascript": "JavaScript",
     };
 
     // nodeIdToAttach = id de la div (sans le #) et iFrameNode = la référence du node (ce que retourne le querySelector)
@@ -74,9 +68,11 @@ export class Editor {
         this.#editor.session.setMode(Editor.modePath + langage)
         this.#langage = langage;
     }
-    getLangage() { return this.#langage }
+    getLangageEditor() { return this.#langage }
 
-    getLangagePretty() { return Editor.syntaxPretty[this.#langage] }
+    getLangageName() {
+        return Object.keys(Editor.syntaxMode).find(key => Editor.syntaxMode[key] === this.#langage);
+    }
 
     setCodeToPlaceholder() { this.#editor.setValue(this.#placeholderCode) }
 

@@ -12,8 +12,8 @@ $navbar = ob_get_clean();
 <main class="flex-1 flex flex-col gap-6 my-6 items-center justify-center">
     <div class="flex flex-col gap-6 my-6 items-center justify-center">
         <div class="flex flex-col w-screen items-center mt-[-100px]">
-            <h1 class="text-center text-primary-light-dm uppercase">Bienvenue sur DaCode !</h1>
-            <p class="text-center max-w-[800px] mt-8">Vous pouvez aller au mode playground pour commencer à coder mais pour sauvegarder votre espace ou partager votre code vous aurez besoin d'un compte</p>
+            <h1 class="text-center text-primary-light-dm">Bienvenue sur DaCode !</h1>
+            <p class="text-center max-w-[800px] mt-8">Vous pouvez aller au mode playground pour commencer à coder mais pour sauvegarder ou partager votre code vous aurez besoin d'un compte</p>
         </div>
         <div class="items-center justify-center flex gap-2 relative wrap">
             <a href="<?= APP_ROOT ?>/cursus" class="overflow-hidden w-32 p-2 h-12 bg-nightsky-light-dm border-none rounded-md text-xl font-bold cursor-pointer text-center relative z-10 group">
