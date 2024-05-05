@@ -65,13 +65,14 @@ export class Editor {
 
 
     setLangage(langage) {
+        // TODO check ownProperty in syntaxMode
         this.#editor.session.setMode(Editor.modePath + langage)
         this.#langage = langage;
     }
     getLangageEditor() { return this.#langage }
 
     getLangageName() {
-        return Object.keys(Editor.syntaxMode).find(key => Editor.syntaxMode[key] === this.#langage);
+        return Editor.syntaxMode[this.#langage];
     }
 
     setCodeToPlaceholder() { this.#editor.setValue(this.#placeholderCode) }

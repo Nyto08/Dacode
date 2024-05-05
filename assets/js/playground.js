@@ -28,8 +28,6 @@ const renderFrame = document.querySelector("#output");
 let liveEditor;
 
 function init() {
-    liveEditor = new Editor("editor-area-1", Editor.syntaxMode.html, renderFrame, true, true);
-
     // set event to change the langage in current editor
     let langageSelect = document.querySelectorAll('.editor-langage');
     langageSelect.forEach(elem => {
@@ -45,6 +43,8 @@ function init() {
 
         elem.addEventListener("change", onLangageChange);
     });
+
+    liveEditor = new Editor("editor-area-1", Editor.syntaxMode.html, renderFrame, true, true);
 }
 
 function mountSaveModal() {
