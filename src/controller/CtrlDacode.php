@@ -49,7 +49,7 @@ class CtrlDacode
             }
         }
 
-        require './view/client/vinterfaceConnexion.php';
+        require './view/client/vlogIn.php';
     }
 
     public function getCreateAccount() {
@@ -76,7 +76,7 @@ class CtrlDacode
             }
         }
 
-        require './view/client/vcreerCompte.php';
+        require './view/client/vsignIn.php';
     }
 
     public function getMyAccount() {

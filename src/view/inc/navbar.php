@@ -1,7 +1,3 @@
-<?php
-$isAdmin = (isset($_SESSION['is-logged']) && $_SESSION['role'] === 'admin') ? true : false;
-?>
-
 <nav class="flex flex-col lg:flex-row gap-y-4 justify-between items-center px-6 py-3 bg-nightsky-regular-dm">
   <a href="<?= APP_ROOT ?>/accueil" class="flex flex-row items-center gap-3">
     <img src="../assets/img/logo.svg" alt="logo pedacode" width="38">
@@ -14,7 +10,13 @@ $isAdmin = (isset($_SESSION['is-logged']) && $_SESSION['role'] === 'admin') ? tr
   </ul>
 
   <div class="relative">
-    <a class="font-bold" href="<?= !isset($_SESSION['is-logged']) ? APP_ROOT . '/login' : '#' ?>" onclick="toggleProfileMenu()"><i class="fa-<?= isset($_SESSION['is-logged']) ? 'solid' : 'regular' ?> fa-user<?= $isAdmin ? '-pen' : '' ?> fa-xl mr-2"></i><?= isset($_SESSION['is-logged']) ? $_SESSION['pseudo'] : 'Se connecter' ?></a>
+    <a class="font-bold"
+    href="<?= !isset($_SESSION['is-logged']) ? APP_ROOT . '/login' : '#' ?>"
+    onclick="toggleProfileMenu()">
+      <i class="fa-<?= isset($_SESSION['is-logged']) ? 'solid' : 'regular' ?> fa-user<?= (isset($_SESSION['is-logged']) && $_SESSION['role'] === 'admin') ? '-pen' : '' ?> fa-xl mr-2">
+      </i>
+      <?= isset($_SESSION['is-logged']) ? $_SESSION['pseudo'] : 'Se connecter' ?>
+    </a>
 
     <!-- N'affiche pas le menu déroulant du user si il n'est pas connecté -->
     <?php if (isset($_SESSION['is-logged'])): ?>  
@@ -22,10 +24,6 @@ $isAdmin = (isset($_SESSION['is-logged']) && $_SESSION['role'] === 'admin') ? tr
       <div role="none">
         <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
         <a href="<?= APP_ROOT ?>/my-account" class="block px-4 py-2" role="menuitem" tabindex="-1" id="menu-item-0">Mon compte</a>
-
-        <?php if ($isAdmin): ?>
-        <a href="<?= APP_ROOT ?>/adminGlobal" class="block px-4 py-2" role="menuitem" tabindex="-1" id="menu-item-1">Panneau Admin</a>
-        <?php endif; ?>
         
       </div>
       <div role="none">
