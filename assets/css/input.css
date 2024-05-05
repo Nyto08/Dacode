@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .btn-default {
+    @apply text-primary-regular-dm font-semibold
+    px-2 py-1 mx-1 my-2
+    rounded border-2 border-solid border-primary-regular-dm
+    hover:bg-primary-regular-dm hover:text-nightsky-dark-dm
+    overflow-hidden
+    transition-colors;
+  }
+}
+
+@layer base {
+  html {
+    @apply bg-nightsky-dark-dm;
+  }
+  
+  /* alternative -> class in body */
+  :root {
+    @apply text-lg font-sans tracking-[.0125em] leading-6 text-primary-regular-dm;
+  }
+  /* ::-moz-selection is automatically added by tailwind */
+  ::selection {
+    @apply text-primary-light-dm bg-nightsky-light-dm;
+  }
+
+  h1 {
+    @apply text-2xl font-semibold;
+  }
+  h2, h3 {
+    @apply text-xl font-semibold;
+  }
+  h4, h5, h6 {
+    @apply text-lg font-semibold;
+  }
+  a:hover {
+    @apply text-primary-light-dm;
+  }
+  pre {
+    @apply font-sans text-wrap;
+  }
+  select {
+    @apply rounded px-1 border-2 border-solid border-primary-regular-dm bg-nightsky-dark-dm;
+  }
+  input, textarea {
+    @apply border-2 border-solid border-subtl-regular-dm rounded;
+  }
+
+
+  /* --- Default scrollbar --- */
+  *::-webkit-scrollbar {
+    @apply size-[12px];
+  }
+
+  *::-webkit-scrollbar-track {
+    @apply rounded-full bg-nightsky-dark-dm;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    @apply bg-subtl-dark-dm;
+
+    border: 2px solid theme('colors.nightsky-dark-dm');
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    @apply bg-subtl-regular-dm;
+  }
+
+  dialog::backdrop {
+    @apply bg-nightsky-dark-dm opacity-25;
+  }
+
+  input[type="checkbox"] {
+    @apply border-2 border-solid border-primary-regular-dm scale-125;
+  }
+  input[type="checkbox"]:checked {
+    @apply border-2 border-solid scale-125;
+  }
+
+}

@@ -1,0 +1,22 @@
+# Cette ligne active le moteur de réécriture d'URL d'Apache
+RewriteEngine On
+
+# Définit la base URL pour les règles de réécriture qui suivent
+RewriteBase /dm/dacode/src
+
+# pour le fun
+# a tester avec http://localhost/travailDM/6-phpMVC/demofavoris/src4/salut
+#RewriteRule ^salut$ index.php
+# a tester avec http://localhost/travailDM/6-phpMVC/demofavoris/src4/rubrique/add/21
+#RewriteRule ^rubrique/([a-z0-9-]+)/([0-9]+)$ index.php?action=$1&id=$2
+
+# ^(.+)$ = condition de la règle de réécriture (correspond à n'importe quelle url demandé, quelle que soit sa longueur)
+# QSA si il y a des parametres de type ?xx=yy alors ils sont conservés
+# L : on ne passe pas a une autre regle si celle ci est validee
+RewriteRule ^(.+)$ index.php [QSA,L]
+
+# a etudier
+#si ce n'est pas un répertoire
+#RewriteCond %{REQUEST_FILENAME} !-d
+# Si ce n'est pas un fichier
+#RewriteCond %{REQUEST_FILENAME} !-f
