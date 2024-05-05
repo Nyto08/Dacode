@@ -89,7 +89,18 @@ export class Editor {
     }
     
     updateCodeChange() {
-        this.#iframeRenderNode.setAttribute("srcdoc", this.#editor.getSession().getValue());
+        this.#iframeRenderNode.setAttribute("srcdoc",
+        `<!DOCTYPE html>
+        <html lang="fr">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <meta http-equiv="Content-Security-Policy" content="default-src 'self; style-src 'self' 'unsafe-inline'">
+        </head>
+        <body>
+        ${this.#editor.getSession().getValue()}
+        </body>
+        </html>`);
     }
     
     /* ------ Event Listeners ------ */
