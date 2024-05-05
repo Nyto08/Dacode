@@ -30,7 +30,7 @@ export class Editor {
     };
 
     // nodeIdToAttach = id de la div (sans le #) et iFrameNode = la référence du node (ce que retourne le querySelector)
-    constructor(nodeIdToAttach, langage = this.syntaxMode.html, iFrameNode = null, enableAutoCompletion = false, wrapEnabled = false) {
+    constructor(nodeIdToAttach, langage = this.syntaxMode["html"], iFrameNode = null, enableAutoCompletion = false, wrapEnabled = false) {
         this.#editor = ace.edit(nodeIdToAttach);
         this.#iframeRenderNode = iFrameNode;
     
@@ -65,9 +65,13 @@ export class Editor {
 
 
     setLangage(langage) {
-        // TODO check ownProperty in syntaxMode
-        this.#editor.session.setMode(Editor.modePath + langage)
-        this.#langage = langage;
+        if (Editor.syntaxMode.hasOwnProperty(langage)) {
+            this.#editor.session.setMode(Editor.modePath + langage)
+            this.#langage = langage;
+        }
+        else {
+            console.error(`Langage : '${langage}' non supporté.`);
+        }
     }
     getLangageEditor() { return this.#langage }
 
