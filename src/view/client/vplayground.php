@@ -39,7 +39,7 @@ $navbar = ob_get_clean();
   <main class="flex-1">
     <header class="px-2 flex flex-row flex-wrap justify-end items-center">
 
-      <button id="code-reset" class="btn-default">Réinitialiser</button>
+      <button id="code-reset" class="btn-default">Nettoyer</button>
       <button id="code-save" class="btn-default">Sauver</button>
       <button id="code-load" class="btn-default">Charger</button>
       
@@ -47,7 +47,12 @@ $navbar = ob_get_clean();
 
     <div class="flex flex-col xl:flex-row mx-1">
       <div class="flex md:flex-row flex-col gap-1 w-full">
-        <div id="editor" class="w-full h-[80vh]"></div>
+        <div id="editors" class="w-full h-[80vh] flex flex-col">
+          <div class="flex flex-1 flex-col">
+            <select name="langage" class="editor-langage border-none outline-none"></select>
+            <div id="editor-area-1" class="flex-1"></div>
+          </div>
+        </div>
         <iframe id="output" class="w-full h-[80vh] bg-nightsky-regular-dm"></iframe>
       </div>
     </div>

@@ -28,7 +28,23 @@ const renderFrame = document.querySelector("#output");
 let liveEditor;
 
 function init() {
-    liveEditor = new Editor("editor", Editor.syntaxMode.html, renderFrame, true, true);
+    liveEditor = new Editor("editor-area-1", Editor.syntaxMode.html, renderFrame, true, true);
+
+    // set event to change the langage in current editor
+    let langageSelect = document.querySelectorAll('.editor-langage');
+    langageSelect.forEach(elem => {
+        for (const key in Editor.syntaxMode) {
+            if (Editor.syntaxMode.hasOwnProperty(key)) {
+                const value = Editor.syntaxMode[key];
+                const option = document.createElement("option");
+                option.value = key;
+                option.text = value;
+                elem.appendChild(option);
+            }
+        }
+
+        elem.addEventListener("change", onLangageChange);
+    });
 }
 
 function mountSaveModal() {
@@ -193,6 +209,10 @@ function onDeleteDataAction() {
     requestDeleteDataFromSlot(parseInt(selectUserSlots.value));
     
     onCloseDataModal();
+}
+
+function onLangageChange(event) {
+    liveEditor.setLangage(event.target.value);
 }
 
 // user code data
