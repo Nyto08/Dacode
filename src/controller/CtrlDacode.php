@@ -26,7 +26,7 @@ class CtrlDacode
         require './view/vindex.php';
     }
 
-    public function getLogin() {
+    public function getLogIn() {
         
 
         // user connecté ? redirection vers mon compte
@@ -52,7 +52,7 @@ class CtrlDacode
         require './view/client/vlogIn.php';
     }
 
-    public function getCreateAccount() {
+    public function getSignIn() {
         
 
         // user connecté ? redirection vers mon compte
@@ -66,7 +66,7 @@ class CtrlDacode
         if (strtolower($_SERVER['REQUEST_METHOD']) === 'post') {
             $ctrlAuth = new CtrlAuth();
             
-            $isCreated = $ctrlAuth->createUserAccount($_POST['pseudo'], $_POST['email'], $_POST['password'], $this->daoPedacode);
+            $isCreated = $ctrlAuth->createUserAccount($_POST['pseudo'], $_POST['email'], $_POST['password'], $this->daoPedacode, true);
             if ($isCreated) {
                 header('Location: ' . APP_ROOT . '/my-account');
                 exit();
@@ -97,24 +97,15 @@ class CtrlDacode
         $ctrlAuth = new CtrlAuth();
         $ctrlAuth->logOut();
 
-        // TODO : redigirer vers la dernière page
         header('Location: ' . APP_ROOT . '/accueil');
         exit();
     }
 
-    public function getCursus() {
-        
-        require './view/client/vcursus.php';
-    }
-
-    public function getNotFound()
-    {
-        
+    public function getNotFound() {
         require './view/v404.php';
     }
 
-    public function getPlayground(): void
-    {
+    public function getPlayground(): void {
         // echo 'getPlayground';
         
 

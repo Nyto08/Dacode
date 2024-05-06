@@ -43,8 +43,8 @@ if ($method == 'get' && !$isRequestAjax){ // Non ajax et methode get (lecture se
         APP_ROOT                            => $ctrlDacode->getIndex(),
         APP_ROOT .'/'                       => $ctrlDacode->getIndex(),
         APP_ROOT .'/accueil'                => $ctrlDacode->getIndex(),
-        APP_ROOT .'/login'                  => $ctrlDacode->getLogin(),
-        APP_ROOT .'/create-account'         => $ctrlDacode->getCreateAccount(),
+        APP_ROOT .'/login'                  => $ctrlDacode->getLogIn(),
+        APP_ROOT .'/create-account'         => $ctrlDacode->getSignIn(),
         APP_ROOT .'/logout'                 => $ctrlDacode->getLogout(),
         APP_ROOT .'/my-account'             => $ctrlDacode->getMyAccount(),
         APP_ROOT .'/playground'             => $ctrlDacode->getPlayground(),
@@ -53,8 +53,8 @@ if ($method == 'get' && !$isRequestAjax){ // Non ajax et methode get (lecture se
 }
 elseif ($method == 'post' && !$isRequestAjax) { // Non ajax et methode post (modification de données)
     match($route){
-        APP_ROOT .'/login'                 => $ctrlDacode->getLogin(),
-        APP_ROOT .'/create-account'        => $ctrlDacode->getCreateAccount(),
+        APP_ROOT .'/login'                 => $ctrlDacode->getLogIn(),
+        APP_ROOT .'/create-account'        => $ctrlDacode->getSignIn(),
         default                            => $ctrlDacode->getNotFound(),
     };
 }

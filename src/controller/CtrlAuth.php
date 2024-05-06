@@ -74,7 +74,7 @@ class CtrlAuth {
         return isset($_SESSION['is-logged']);
     }
 
-    public function createUserAccount($pseudo, $email, $password, DaoPedacode $dao = null): bool {
+    public function createUserAccount($pseudo, $email, $password, DaoPedacode $dao = null, $enableLogin = false): bool {
         if ($dao === null) {
             $dao = new DaoPedacode();
         }
@@ -84,8 +84,11 @@ class CtrlAuth {
             try {
                 $dao->addUserAccount($pseudo, $email, $hashedPw);
                 $isCreated = true;
+                if ($enableLogin) {
+                    $user = $dao->getUserByPseudo($pseudo);
+                    $this->logIn($user);
+                }
             } catch (\Exception $e) {
-                // echo $e->getMessage();
                 $this->cleanUserFantom($pseudo, $dao); // on efface le user (si créé) car on ne connaît pas l'origine du problème.
                 $isCreated = false;
                 $this->msg = CtrlAuth::FORM_INTERNAL_ERROR;
