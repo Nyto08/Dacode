@@ -59,7 +59,7 @@ $navbar = ob_get_clean();
             <div id="editor-area-1" class="flex-1"></div>
           </div>
         </div>
-        <iframe id="output" class="w-full h-[80vh] bg-nightsky-regular-dm" sandbox="allow-same-origin allow-scripts"></iframe>
+        <iframe id="output" class="w-full h-[80vh] bg-slate-200" sandbox="allow-same-origin allow-scripts"></iframe>
       </div>
     </div>
   </main>
