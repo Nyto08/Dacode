@@ -41,7 +41,7 @@ $navbar = ob_get_clean();
       <input class="border-none outline-none bg-gray-100 p-1" type="password" id="password" name="password">
 
       <label class="ml-2" for="terms">
-        <input class="mt-6 border-none outline-none" type="checkbox" id="terms" name="terms" required>&nbsp;&nbsp;J'accepte les <a class="text-primary-light-dm hover:text-nightsky-regular-dm underline" href="#">termes et conditions</a> de Pedacode
+        <input class="mt-6 border-none outline-none" type="checkbox" id="terms" name="terms" required>&nbsp;&nbsp;J'accepte les <a class="text-primary-light-dm hover:text-nightsky-regular-dm underline" href="#">termes et conditions</a> de DaCode
       </label>
 
       <input class="p-1 mt-4 border-none outline-none text-white bg-nightsky-light-dm active:bg-nightsky-regular-dm cursor-pointer" type="submit" value="Créer un compte">
