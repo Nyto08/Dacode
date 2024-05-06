@@ -40,7 +40,7 @@ $navbar = ob_get_clean();
       <input class="mt-6 text-white bg-primary-light-dm border-none p-1 active:bg-primary-regular-dm cursor-pointer" type="submit" value="Connexion">
     </form>
 
-    <a class="w-full text-center text-white bg-nightsky-light-dm rounded border-none p-1 hover:text-white active:bg-nightsky-regular-dm cursor-pointer" href="<?= APP_ROOT ?>/create-account">Créer un compte</a>
+    <a class="mt-4 w-full text-center text-white bg-nightsky-light-dm rounded border-none p-1 hover:text-white active:bg-nightsky-regular-dm cursor-pointer" href="<?= APP_ROOT ?>/create-account">Créer un compte</a>
 
     <span class="mt-6">Mot de passe oublié ? <a class="text-primary-light-dm hover:text-nightsky-regular-dm underline" href="<?= APP_ROOT ?>/pw-reset">Cliquez-ici</a></span>
 
