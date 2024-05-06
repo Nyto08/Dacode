@@ -89,9 +89,14 @@ export class Editor {
     }
     
     updateCodeChange() {
+        /* !!! Pas de sécurité avec le code saisi, donc du code malveillant peut être exécuté,
+        ici le CSP (content security policy) est utilisé pour minimiser les problèmes mais cela
+        ne suffit pas contre des attaques XSS par exemple, enfin à partir d'ici plusieurs pistes
+        sont envisageables comme l'utilisation de bibliothèques puis des checks avant
+        de stocker dans la base de données. */
         this.#iframeRenderNode.setAttribute("srcdoc",
         `<!DOCTYPE html>
-        <html lang="fr">
+        <html>
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">

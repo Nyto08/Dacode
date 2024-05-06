@@ -57,8 +57,8 @@ function mountSaveModal() {
     if (divInputSlot.classList.contains("hidden")) divInputSlot.classList.remove("hidden");
 
     // set the option's text field to have the save name except for '- Emplacement vide -'
-    let saveName = selectUserSlots.children[selectUserSlots.selectedIndex].innerText;
-    if (saveName.trim() !== TXT_EMPTY_SLOT){
+    let saveName = selectUserSlots.children[selectUserSlots.selectedIndex].innerText.trim();
+    if (saveName !== TXT_EMPTY_SLOT){
         inputSlot.value = saveName;
         inputSlot.setSelectionRange(0, inputSlot.value.length);
     } else {
