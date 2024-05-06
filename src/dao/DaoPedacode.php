@@ -43,7 +43,7 @@ class DaoPedacode
             $row = $statement->fetch(\PDO::FETCH_OBJ);
             if ($row) {
                 $subscription = new Subscription($row->id_sub, $row->name_sub, $row->type_sub);
-                $user = new UserProfile($row->id_user, $row->mail_user, $row->pseudo_user, $row->pwd_user, $row->role_user, $row->date_sub, $subscription);
+                $user = new UserProfile($row->id_user, $row->mail_user, $row->pseudo_user, $row->pwd_user, $row->role_user, $row->crea_date, $row->date_sub, $subscription);
             }
         } catch (\Exception $er) {
             throw new \Exception($er->getMessage());
@@ -66,7 +66,7 @@ class DaoPedacode
             $row = $statement->fetch(\PDO::FETCH_OBJ);
             if ($row) {
                 $subscription = new Subscription($row->id_sub, $row->name_sub, $row->type_sub);
-                $user = new UserProfile($row->id_user, $row->mail_user, $row->pseudo_user, $row->pwd_user, $row->role_user, $row->date_sub, $subscription);
+                $user = new UserProfile($row->id_user, $row->mail_user, $row->pseudo_user, $row->pwd_user, $row->role_user, $row->crea_date, $row->date_sub, $subscription);
             }
         } catch (\Exception $er) {
             throw new \Exception($er->getMessage());
@@ -296,9 +296,7 @@ class DaoPedacode
             throw new \Error($er->getMessage());
         }
     }
-    //##########################//
-    //######## LANGAGE #########//
-    //##########################//
+    
     public function getLangages(): ?array
     {
         $langages = [];
@@ -319,6 +317,7 @@ class DaoPedacode
 
         return $langages;
     }
+
     public function getLangageByName(string $nameLang): ?Langage
     {
         $query = Requests::SELECT_LANGAGE_BY_NAME;
@@ -404,291 +403,5 @@ class DaoPedacode
         } catch (\Error $er) {
             throw new \Error($er->getMessage());
         }
-    }
-
-    //##########################//
-    //####### CATEGORIES #######//
-    //##########################//
-    public function getCategories()
-    {
-        $categories = [];
-        $query = Requests::SELECT_CATEGORIES;
-
-        try {
-            $statement = $this->conn->query($query);
-            $statement->execute();
-            while ($row = $statement->fetch(\PDO::FETCH_OBJ)) {
-                $newCategory = new Category($row->name_cat, $row->id_cat);
-                $categories[] = $newCategory;
-            };
-        } catch (\Exception $e) {
-            throw new \Exception('Exception DaoPedacode - getCategories !!! : ' .  $e->getMessage(), DaoUtil::convertCode($e->getCode()));
-        } catch (\Error $error) {
-            throw new \Exception('Error  DaoPedacode - getCategories !!! : ' .  $error->getMessage());
-        }
-        return $categories;
-    }
-
-    public function getCategoryById(int $id_cat)
-    {
-        if (!isset($id_cat)) throw new DaoException(DaoException::CATEGORY_KO);
-        $category = null;
-        $query = Requests::SELECT_CATEGORY_BY_ID;
-        try {
-            $query = $this->conn->prepare($query);
-            $query->bindValue(':id_cat', $id_cat, \PDO::PARAM_INT);
-            $query->execute();
-            $row = $query->fetch(\PDO::FETCH_OBJ);
-            if (isset($row->id_cat)) {
-                $category = new Category($row->name_cat, $row->id_cat);
-            }
-        } catch (\Exception $e) {
-            throw new \Exception('Exception DaoPedacode - getCategoryById !!! : ' .  $e->getMessage(), DaoUtil::convertCode($e->getCode()));
-        } catch (\Error $error) {
-            throw new \Exception('Error DaoPedacode - getCategoryById !!! : ' .  $error->getMessage());
-        }
-        return $category;
-    }
-
-    public function addCategory(Category $category)
-    {
-        $query = Requests::INSERT_CATEGORY;
-        try {
-            $statement = $this->conn->prepare($query);
-            $id = $category->getId();
-            $name = $category->getName();
-            $statement->bindParam(':id', $id, \PDO::PARAM_INT);
-            $statement->bindParam(':name', $name, \PDO::PARAM_STR);
-            $statement->execute();
-        } catch (\PDOException $pdoe) {
-            switch ($pdoe->errorInfo[1]) {
-                case 1062:
-                    if (str_contains($pdoe->errorInfo[2], "PRIMARY")) throw new DaoException(DaoException::CATEGORY_EXIST);
-                default:
-                    throw $pdoe;
-            }
-        } catch (\Exception $e) {
-            throw $e;
-        } catch (\Error $error) {
-            throw $error;
-        }
-    }
-
-    public function updateCategory(Category $category)
-    {
-        $query = Requests::UPDATE_CATEGORY;
-        try {
-            $statement = $this->conn->prepare($query);
-            $id = $category->getId();
-            $name = $category->getName();
-            $statement->bindValue(':name_cat', $name, \PDO::PARAM_STR);
-            $statement->bindValue(':id_cat', $id, \PDO::PARAM_INT);
-            $statement->execute();
-        } catch (\PDOException $pdoe) {
-            switch ($pdoe->errorInfo[1]) {
-                case 1062:
-                    if (str_contains($pdoe->errorInfo[2], "PRIMARY")) throw new DaoException(DaoException::CATEGORY_EXIST);
-                default:
-                    throw $pdoe;
-            }
-        }
-    }
-
-    public function delCategory(int $id_cat)
-    {
-        $query = Requests::DELETE_CATEGORY;
-
-        try {
-            $statement = $this->conn->prepare($query);
-            $statement->bindValue(':id_cat', $id_cat, \PDO::PARAM_INT);
-            $statement->execute();
-        } catch (\Exception $er) {
-            throw new \Exception($er->getMessage());
-        } catch (\Error $er) {
-            throw new \Error($er->getMessage());
-        }
-    }
-
-    //##########################//
-    //####### CHAPITRES ########//
-    //##########################//
-    public function getChapitresByCategory($categoryId)
-    {
-
-        $query = Requests::SELECT_CHAPTERS_BY_CATEGORY;
-        $statement = $this->conn->prepare($query);
-        $statement->bindValue(':categoryId', $categoryId, \PDO::PARAM_INT);
-        $statement->execute();
-        $chapitres = [];
-        while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
-            $chapitre = new Chapter($row['title_ch'], (int)$row['id_ch']);
-            $chapitres[] = $chapitre;
-        }
-        return $chapitres;
-    }
-
-    public function getChapitreById(int $id_ch)
-    {
-        $query = Requests::SELECT_CHAPTER_BY_ID;
-
-        try {
-            $statement = $this->conn->prepare($query);
-            $statement->bindValue(':id_ch', $id_ch, \PDO::PARAM_INT);
-            $statement->execute();
-            $row = $statement->fetch(\PDO::FETCH_OBJ);
-            if (isset($row->id_ch)) {
-                $chapitre = new Chapter($row->title_ch, $row->id_ch);
-                return $chapitre;
-            }
-        } catch (\Exception $e) {
-            throw new \Exception('Exception DaoPedacode - getChapitreById !!! : ' .  $e->getMessage(), DaoUtil::convertCode($e->getCode()));
-        } catch (\Error $error) {
-            throw new \Exception('Error DaoPedacode - getChapitreById !!! : ' .  $error->getMessage());
-        }
-    }
-
-    public function addChapitre(string $titleCh, int $id_cat)
-    {
-        // Récupérer la catégorie à partir de son ID
-        $category = $this->getCategoryById($id_cat);
-
-        // Vérifier si la catégorie existe
-        if ($category === null) {
-            throw new \Exception("La catégorie avec l'ID $id_cat n'existe pas.");
-        }
-
-        $query = Requests::ADD_CHAPTER;
-
-        try {
-            $statement = $this->conn->prepare($query);
-            $statement->bindValue(':title_ch', $titleCh, \PDO::PARAM_STR);
-            $statement->bindValue(':id_cat', $id_cat, \PDO::PARAM_INT);
-            $statement->execute();
-        } catch (\Exception $er) {
-            throw new \Exception($er->getMessage());
-        } catch (\Error $er) {
-            throw new \Error($er->getMessage());
-        }
-    }
-
-    public function updateChapitre(Chapter $chapter)
-    {
-        $query = Requests::UPDATE_CHAPTER;
-
-        try {
-            $statement = $this->conn->prepare($query);
-            $id_ch = $chapter->getId();
-            $titleCh = $chapter->getTitle();
-            $statement->bindValue(':title_ch', $titleCh, \PDO::PARAM_STR);
-            $statement->bindValue(':id_ch', $id_ch, \PDO::PARAM_INT);
-            $statement->execute();
-        } catch (\Exception $er) {
-            throw new \Exception($er->getMessage());
-        } catch (\Error $er) {
-            throw new \Error($er->getMessage());
-        }
-    }
-
-    public function delChapitre(string $id_chap)
-    {
-        $query = Requests::DELETE_CHAPTER_BY_ID;
-
-        try {
-            $statement = $this->conn->prepare($query);
-            $statement->bindValue(':id_ch', $id_chap, \PDO::PARAM_INT);
-            $statement->execute();
-        } catch (\Exception $er) {
-            throw new \Exception($er->getMessage());
-        } catch (\Error $er) {
-            throw new \Error($er->getMessage());
-        }
-    }
-
-    //##########################//
-    //########  LESSONS ########//
-    //##########################//
-    public function getLessonsByChapterId($chapterId)
-    {
-        $query = Requests::SELECT_LESSONS_BY_CHAPTER_ID;
-        try {
-            $statement = $this->conn->prepare($query);
-            $statement->bindValue(':chapterId', $chapterId, \PDO::PARAM_INT);
-            $statement->execute();
-            $lessons = [];
-            while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
-                // $creation = $row['modif_les'];
-                $lesson = new Lesson(
-                    (int)$row['id_les'],
-                    (int)$row['id_ch'],
-                    (int)$row['id_sub'],
-                    (string)$row['title_les'],
-                    (string)$row['instr_les'],
-                    // $creation,
-                );
-                $lessons[] = $lesson;
-            }
-            return $lessons;
-        } catch (\PDOException $er) {
-            throw new \Exception($er->getMessage());
-        }
-    }
-
-    public function addLesson(string $titleLes, int $chapterId)
-    {
-        $chapitre = $this->getChapitresByCategory($chapterId);
-        if ($chapitre === null) {
-            throw new \Exception("Le chapitre avec l'ID $chapterId n'existe pas.");
-        }
-        $query = Requests::ADD_LESSON_BY_CHAPTER;
-
-        try {
-            $statement = $this->conn->prepare($query);
-            $statement->bindValue(':title_les', $titleLes, \PDO::PARAM_STR);
-            $statement->bindValue(':chapterId', $chapterId, \PDO::PARAM_INT);
-            $statement->bindValue(':instr_les', '', \PDO::PARAM_STR);
-            $statement->bindValue(':id_sub', '', \PDO::PARAM_INT);
-            $statement->execute();
-        } catch (\Exception $er) {
-            throw new \Exception($er->getMessage());
-        } catch (\Error $er) {
-            throw new \Error($er->getMessage());
-        }
-    }
-
-    public function delLesson(int $id_les)
-    {
-        $query = Requests::DELETE_LESSON_BY_ID;
-
-        try {
-            $statement = $this->conn->prepare($query);
-            $statement->bindValue(':id_les', $id_les, \PDO::PARAM_INT);
-            $statement->execute();
-        } catch (\Exception $er) {
-            throw new \Exception($er->getMessage());
-        } catch (\Error $er) {
-            throw new \Error($er->getMessage());
-        }
-    }
-
-    public function getGoalsByLessonId(int $lessonId): ?array
-    {
-        $goals = [];
-        $query = Requests::SELECT_GOAL_BY_LESSON;
-
-        try {
-            $statement = $this->conn->prepare($query);
-            $statement->bindValue(1, $lessonId, \PDO::PARAM_INT);
-            $statement->execute();
-            while ($row = $statement->fetch(\PDO::FETCH_OBJ)) {
-                $goal = new Goal($row->id_goal, $row->descr_goal, $row->condi_goal, $lessonId);
-                $goals[] = $goal;
-            }
-        } catch (\Exception $er) {
-            throw new \Exception($er->getMessage());
-        } catch (\Error $er) {
-            throw new \Error($er->getMessage());
-        }
-
-        return $goals;
     }
 }

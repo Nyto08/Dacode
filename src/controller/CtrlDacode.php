@@ -83,7 +83,7 @@ class CtrlDacode
         
         if (isset($_SESSION['is-logged'])) {
             $ctrlAuth = new CtrlAuth();
-            $ctrlAuth->getLoggedUser($this->daoPedacode);
+            $user = $ctrlAuth->getLoggedUser($this->daoPedacode);
         }
         else {
             header('Location: ' . APP_ROOT . '/login');
