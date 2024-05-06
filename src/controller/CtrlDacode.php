@@ -106,13 +106,16 @@ class CtrlDacode
     }
 
     public function getNotFound() {
-        require './view/v404.php';
+        // is ajax
+        if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+            http_response_code(404);
+            exit();
+        } else {
+            require './view/v404.php';
+        }
     }
 
     public function getPlayground(): void {
-        // echo 'getPlayground';
-        
-
         $mappedWorkspaces = array_fill(0, CtrlDacode::MAX_SAVE_SLOTS, CtrlDacode::EMPTY_SLOT);
 
         if (isset($_SESSION['is-logged'])) {
@@ -128,95 +131,96 @@ class CtrlDacode
         require './view/client/vplayground.php';
     }
 
-    // ################################
-    // ######### AJAX section #########
-    // ################################
+    function loadUserDataFromSlot(): void {
+        // is ajax
+        if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+            header('Content-Type: application/json');
 
-    function loadUserDataFromSlot(): void
-    {
-        
-
-        $slotIndex = isset($_GET['slotIndex']) ? intval($_GET['slotIndex']) : -1;
-
-        if (!is_numeric($slotIndex) || $slotIndex < 0 || $slotIndex > CtrlDacode::MAX_SAVE_SLOTS) {
-            throw new \Exception(Message::INVALID_WORKSPACE_PLAYG_SLOT . ' : ' . $slotIndex);
+            $slotIndex = isset($_GET['slotIndex']) ? intval($_GET['slotIndex']) : -1;
+    
+            if (!is_numeric($slotIndex) || $slotIndex < 0 || $slotIndex > CtrlDacode::MAX_SAVE_SLOTS) {
+                throw new \Exception(Message::INVALID_WORKSPACE_PLAYG_SLOT . ' : ' . $slotIndex);
+            }
+            $dataCodeArr = $this->daoPedacode->getCodeFromPlaygSlot($slotIndex, $_SESSION['id']);
+    
+            $encodedData = json_encode($dataCodeArr);
+    
+            echo $encodedData ? $encodedData : '';
+            exit();
         }
-        $dataCodeArr = $this->daoPedacode->getCodeFromPlaygSlot($slotIndex, $_SESSION['id']);
-
-        $encodedData = json_encode($dataCodeArr);
-
-        echo $encodedData ? $encodedData : '';
-        exit();
     }
 
-    function deleteUserDataFromSlot(): void
-    {
-        
+    function deleteUserDataFromSlot(): void {
+        // is ajax
+        if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+            header('Content-Type: application/json');
 
-        $slotIndex = isset($_POST['slotIndex']) ? intval($_POST['slotIndex']) : -1;
-
-        if (!is_numeric($slotIndex) || $slotIndex < 0 || $slotIndex > CtrlDacode::MAX_SAVE_SLOTS) {
-            throw new \Exception(Message::INVALID_WORKSPACE_PLAYG_SLOT . ' : ' . $slotIndex);
+            $slotIndex = isset($_POST['slotIndex']) ? intval($_POST['slotIndex']) : -1;
+    
+            if (!is_numeric($slotIndex) || $slotIndex < 0 || $slotIndex > CtrlDacode::MAX_SAVE_SLOTS) {
+                throw new \Exception(Message::INVALID_WORKSPACE_PLAYG_SLOT . ' : ' . $slotIndex);
+            }
+            $workspaceId = $this->daoPedacode->getPlaygWorkspaceIdByUserId($slotIndex, $_SESSION['id']);
+    
+            if ($workspaceId !== null) {
+                $this->daoPedacode->deletePlaygWorkspace($workspaceId);
+            }
+    
+            exit();
         }
-        $workspaceId = $this->daoPedacode->getPlaygWorkspaceIdByUserId($slotIndex, $_SESSION['id']);
-
-        if ($workspaceId !== null) {
-            $this->daoPedacode->deletePlaygWorkspace($workspaceId);
-        }
-
-        exit();
     }
 
-    function saveUserDataFromSlot(): void
-    {
-        // json
-        // code_data: liveEditor.editor.getValue(),
-        // name_workspace: inputSlot.value,
-        // langage_name: liveEditor.getLangage(),
-        // langage_extension: liveEditor.getLangagePretty()
+    function saveUserDataFromSlot(): void {
+        // is ajax
+        if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+            header('Content-Type: application/json');
+            // json
+            // code_data: liveEditor.editor.getValue(),
+            // name_workspace: inputSlot.value,
+            // langage_name: liveEditor.getLangage(),
+            // langage_extension: liveEditor.getLangagePretty()
 
-        
+            $workspaceData = json_decode($_POST['dataJson'], true);
+            $slotIndex = isset($workspaceData['slot_index']) ? intval($workspaceData['slot_index']) : -1;
 
-        $workspaceData = json_decode($_POST['dataJson'], true);
-        $slotIndex = isset($workspaceData['slot_index']) ? intval($workspaceData['slot_index']) : -1;
+            if (!is_numeric($slotIndex) || $slotIndex < 0 || $slotIndex > CtrlDacode::MAX_SAVE_SLOTS) {
+                throw new \Exception(Message::INVALID_WORKSPACE_PLAYG_SLOT . ' : ' . $slotIndex);
+            }
 
-        if (!is_numeric($slotIndex) || $slotIndex < 0 || $slotIndex > CtrlDacode::MAX_SAVE_SLOTS) {
-            throw new \Exception(Message::INVALID_WORKSPACE_PLAYG_SLOT . ' : ' . $slotIndex);
+            if (
+                !isset($workspaceData['code_data']) && !is_string($workspaceData['code_data'])
+                || !isset($workspaceData['langage_name']) && !is_string($workspaceData['langage_name'])
+                || !isset($workspaceData['langage_extension']) && !is_string($workspaceData['langage_extension'])
+            ) {
+                throw new \Exception(Message::INVALID_JSON_DATA);
+            }
+
+            $langage = $this->daoPedacode->getLangageByName($workspaceData['langage_extension']);
+
+            // le langage est invalide ou n'existe pas dans la bdd
+            // if ($langage === null) { return ''; } // TODO : throw error
+
+            $workspaceId = $this->daoPedacode->getPlaygWorkspaceIdByUserId($slotIndex, $_SESSION['id']);
+
+            // current workspace is null, create it
+            if ($workspaceId === null) {
+                $workspaceId = $this->daoPedacode->addPlaygWorkspace($_SESSION['id'], $workspaceData['name_workspace'], $slotIndex);
+            }
+            // Workspace exists, update name
+            else {
+                $this->daoPedacode->updatePlaygWorkspaceName($workspaceId, $workspaceData['name_workspace']);
+            }
+
+            // delete all code from workspace byb id
+            $this->daoPedacode->deleteCodeFromWorkspace($workspaceId);
+
+            // insert new codes
+            $dataCode = new DataCode($workspaceId, $workspaceData['code_data'], $langage);
+            $this->daoPedacode->addCodeFromWorkspace($dataCode);
+
+            // TODO : return date if there is no name
+            echo $workspaceData['name_workspace'];
+            exit();
         }
-
-        if (
-            !isset($workspaceData['code_data']) && !is_string($workspaceData['code_data'])
-            || !isset($workspaceData['langage_name']) && !is_string($workspaceData['langage_name'])
-            || !isset($workspaceData['langage_extension']) && !is_string($workspaceData['langage_extension'])
-        ) {
-            throw new \Exception(Message::INVALID_JSON_DATA);
-        }
-
-        $langage = $this->daoPedacode->getLangageByName($workspaceData['langage_extension']);
-
-        // le langage est invalide ou n'existe pas dans la bdd
-        // if ($langage === null) { return ''; } // TODO : throw error
-
-        $workspaceId = $this->daoPedacode->getPlaygWorkspaceIdByUserId($slotIndex, $_SESSION['id']);
-
-        // current workspace is null, create it
-        if ($workspaceId === null) {
-            $workspaceId = $this->daoPedacode->addPlaygWorkspace($_SESSION['id'], $workspaceData['name_workspace'], $slotIndex);
-        }
-        // Workspace exists, update name
-        else {
-            $this->daoPedacode->updatePlaygWorkspaceName($workspaceId, $workspaceData['name_workspace']);
-        }
-
-        // delete all code from workspace byb id
-        $this->daoPedacode->deleteCodeFromWorkspace($workspaceId);
-
-        // insert new codes
-        $dataCode = new DataCode($workspaceId, $workspaceData['code_data'], $langage);
-        $this->daoPedacode->addCodeFromWorkspace($dataCode);
-
-        // TODO : return date if there is no name
-        echo $workspaceData['name_workspace'];
-        exit();
     }
 }
