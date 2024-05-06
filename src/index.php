@@ -2,12 +2,11 @@
 namespace dacode;
 
 use dacode\controller\CtrlDacode;
-use dacode\metier\UserProfile;
 
 require_once '../../vendor/autoload.php';
 
-session_start();
-// var_dump($_SESSION);
+if (session_status() != PHP_SESSION_ACTIVE) session_start();
+
 $ctrlDacode = new CtrlDacode();
 
 
