@@ -26,6 +26,10 @@ class CtrlDacode
         require './view/vindex.php';
     }
 
+    public function getAbout() {
+        require './view/client/vabout.php';
+    }
+
     public function getLogIn() {
         
 

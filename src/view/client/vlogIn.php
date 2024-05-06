@@ -23,7 +23,7 @@ $navbar = ob_get_clean();
         <path d="M11.9904 33.6899L18.0222 36.1174V55.2426H19.6405V74.0001H10.3721V55.2426H11.9168L11.9904 33.6899Z"/>
       </svg>
 
-      <span class="text-3xl font-semibold">Pedacode</span>
+      <span class="text-3xl font-semibold">DaCode</span>
     </div>
 
     <span class="mt-6">Connecter-vous pour accéder à votre espace</span>

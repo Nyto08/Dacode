@@ -736,6 +736,11 @@ input[type="checkbox"]:checked {
   margin-bottom: 1.5rem;
 }
 
+.mx-16 {
+  margin-left: 4rem;
+  margin-right: 4rem;
+}
+
 .ml-2 {
   margin-left: 0.5rem;
 }
@@ -766,6 +771,18 @@ input[type="checkbox"]:checked {
 
 .mt-8 {
   margin-top: 2rem;
+}
+
+.mt-24 {
+  margin-top: 6rem;
+}
+
+.mt-14 {
+  margin-top: 3.5rem;
+}
+
+.mt-20 {
+  margin-top: 5rem;
 }
 
 .block {
@@ -826,6 +843,18 @@ input[type="checkbox"]:checked {
 
 .max-w-\[800px\] {
   max-width: 800px;
+}
+
+.max-w-\[\] {
+  max-width: ;
+}
+
+.max-w-\[1080\] {
+  max-width: 1080;
+}
+
+.max-w-\[1080px\] {
+  max-width: 1080px;
 }
 
 .flex-1 {
@@ -1061,6 +1090,11 @@ input[type="checkbox"]:checked {
 .py-8 {
   padding-top: 2rem;
   padding-bottom: 2rem;
+}
+
+.px-16 {
+  padding-left: 4rem;
+  padding-right: 4rem;
 }
 
 .pb-12 {

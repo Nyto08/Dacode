@@ -44,7 +44,7 @@ function init() {
         elem.addEventListener("change", onLangageChange);
     });
 
-    liveEditor = new Editor("editor-area-1", "html", renderFrame, true, true);
+    liveEditor = new Editor("editor-area", "html", renderFrame, true, true);
 }
 
 function mountSaveModal() {

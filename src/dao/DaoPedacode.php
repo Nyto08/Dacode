@@ -193,8 +193,7 @@ class DaoPedacode
         return $dataCodeArr;
     }
 
-    public function addCodeFromWorkspace(DataCode $dataCode)
-    {
+    public function addCodeFromWorkspace(DataCode $dataCode): void {
         $query = Requests::INSERT_CODE_IN_WORKSPACE;
 
         try {

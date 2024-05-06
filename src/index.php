@@ -48,6 +48,7 @@ if ($method == 'get' && !$isRequestAjax){ // Non ajax et methode get (lecture se
         APP_ROOT .'/logout'                 => $ctrlDacode->getLogout(),
         APP_ROOT .'/my-account'             => $ctrlDacode->getMyAccount(),
         APP_ROOT .'/playground'             => $ctrlDacode->getPlayground(),
+        APP_ROOT .'/about'                  => $ctrlDacode->getAbout(),
         default                             => $ctrlDacode->getNotFound(),
     };
 }

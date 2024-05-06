@@ -10,7 +10,7 @@ $navbar = ob_get_clean();
 <?php ob_start(); ?>
 
   <!-- modal pour sauvegarder/charger le code utilisateur -->
-  <!-- le dialog est changéé à la volée selon que l'utilisateur clique sur sauver ou charger -->
+  <!-- le dialog est changé à la volée selon que l'utilisateur clique sur sauver ou charger -->
   <dialog id="user-data-modal" class="px-4 py-2 border-2 border-solid border-nightsky-light-dm text-lg font-sans tracking-[.0125em] leading-6 text-primary-regular-dm bg-nightsky-dark-dm backdrop-opacity-5">
     <div class="flex flex-col items-center w-full">
       <p id="slot-action-text" class="text-xl text-primary-regular-dm font-semibold">-</p>
@@ -51,13 +51,15 @@ $navbar = ob_get_clean();
 
     <div class="flex flex-col xl:flex-row mx-1">
       <div class="flex md:flex-row flex-col gap-1 w-full">
-        <div id="editors" class="w-full h-[80vh] flex flex-col">
+        <div class="w-full h-[80vh] flex flex-col">
+
           <div class="flex flex-1 flex-col">
             <div>
               <select name="langage" class="editor-langage border-none outline-none"></select>
             </div>
-            <div id="editor-area-1" class="flex-1"></div>
+            <div id="editor-area" class="flex-1"></div>
           </div>
+
         </div>
         <iframe id="output" class="w-full h-[80vh] bg-slate-200" sandbox="allow-same-origin allow-scripts"></iframe>
       </div>
