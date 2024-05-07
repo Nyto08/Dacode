@@ -55,9 +55,23 @@ $navbar = ob_get_clean();
 
           <div class="flex flex-1 flex-col">
             <div>
-              <select name="langage" class="editor-langage border-none outline-none"></select>
+              <span class="border-none outline-none">HTML</span>
             </div>
-            <div id="editor-area" class="flex-1"></div>
+            <div id="editor-area-html" class="editor flex-1"></div>
+          </div>
+
+          <div class="flex flex-1 flex-col">
+            <div class="mt-2">
+              <span class="border-none outline-none">CSS</span>
+            </div>
+            <div id="editor-area-css" class="editor flex-1"></div>
+          </div>
+
+          <div class="flex flex-1 flex-col">
+            <div class="mt-2">
+              <span class="border-none outline-none">JavaScript</span>
+            </div>
+            <div id="editor-area-javascript" class="editor flex-1"></div>
           </div>
 
         </div>

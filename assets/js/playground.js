@@ -25,26 +25,16 @@ const TXT_EMPTY_SLOT = '- Emplacement vide -';
 
 const renderFrame = document.querySelector("#output");
 
-let liveEditor;
+let liveEditors = [];
 
 function init() {
-    // set event to change the langage in current editor
-    let langageSelect = document.querySelectorAll('.editor-langage');
-    langageSelect.forEach(elem => {
-        for (const key in Editor.syntaxMode) {
-            if (Editor.syntaxMode.hasOwnProperty(key)) {
-                const value = Editor.syntaxMode[key];
-                const option = document.createElement("option");
-                option.value = key;
-                option.text = value;
-                elem.appendChild(option);
-            }
-        }
-
-        elem.addEventListener("change", onLangageChange);
-    });
-
-    liveEditor = new Editor("editor-area", "html", updateEditorData, true, true);
+    let editorHtml = document.getElementById("editor-area-html");
+    let editorCss = document.getElementById("editor-area-css");
+    let editorJs = document.getElementById("editor-area-javascript");
+    
+    liveEditors.push(new Editor(editorHtml, "html", updateEditorData, true, true));
+    liveEditors.push(new Editor(editorCss, "css", updateEditorData, true, true));
+    liveEditors.push(new Editor(editorJs, "javascript", updateEditorData, true, true));
 }
 
 function mountSaveModal() {
@@ -81,27 +71,33 @@ function setEditorData(dataJson) {
 
     // chaque index représente un éditeur, si il y a 3 index alors il y aura 3 éditeurs (par ex: html, css, js), pour le moment je charge que le 1er mais la bdd et tout le dao peuvent fonctionnent pour supporter plusieurs éditeurs sans problème.
     if (typeof Object && data.length !== 0){
-        liveEditor.setLangage(data[0]['langage']['extension']);
-        liveEditor.editor.getSession().setValue(data[0]['code']);
+        liveEditors.setLangage(data[0]['langage']['extension']);
+        liveEditors.editor.getSession().setValue(data[0]['code']);
     }
 }
 
-function updateEditorData(data, langage = "html") {
+function updateEditorData() {
     /* !!! Pas de sécurité avec le code saisi, donc du code malveillant peut être exécuté,
     ici le CSP (content security policy) est utilisé pour minimiser les problèmes mais cela
     ne suffit pas contre des attaques XSS par exemple, enfin à partir d'ici plusieurs pistes
     sont envisageables comme l'utilisation de bibliothèques puis des checks avant
     de stocker dans la base de données. */
+
     renderFrame.setAttribute("srcdoc",
     `<!DOCTYPE html>
     <html>
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self; style-src 'self' 'unsafe-inline'">
     </head>
         <body>
-        ${data}
+        ${liveEditors[0].editor.getSession().getValue()}
+        <style>
+        ${liveEditors[1].editor.getSession().getValue()}
+        </style>
+        <script>
+        ${liveEditors[2].editor.getSession().getValue()}
+        </script>
         </body>
     </html>`);
 }
@@ -122,11 +118,11 @@ function requestSaveDataFromSlot(slotIndex) {
 
     // prep json data
     let data = {
-        code_data: liveEditor.editor.getValue(),
+        code_data: liveEditors.editor.getValue(),
         name_workspace: inputSlot.value,
         slot_index: slotIndex,
-        langage_name: liveEditor.getLangageName(),
-        langage_extension: liveEditor.getLangageEditor()
+        langage_name: liveEditors.getLangageName(),
+        langage_extension: liveEditors.getLangageEditor()
     };
 
     // charge la fonction avec les paramètres (slotIndex, DataCode)
@@ -193,7 +189,9 @@ function requestDeleteDataFromSlot(slotIndex) {
 /* ------ Event Listeners ------ */
 
 function onResetCode() {
-    liveEditor.clearEditor();
+    liveEditors.forEach(editor => {
+        editor.clearEditor();
+    });;
 }
 
 function onOpenDataModal() {
@@ -231,9 +229,10 @@ function onDeleteDataAction() {
     onCloseDataModal();
 }
 
-function onLangageChange(event) {
-    liveEditor.setLangage(event.target.value);
-}
+// function onLangageChange(event) {
+//     // FIXME : find editor caller
+//     liveEditors.setLangage(event.target.value);
+// }
 
 // user code data
 BtnReset.addEventListener("click", onResetCode);

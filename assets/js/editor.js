@@ -52,7 +52,6 @@ export class Editor {
     
         // render to the iframe if provided
         if (this.#callback !== null) {
-            this.updateCodeChange();
             this.#editor.getSession().on("change", this.onCodeChange.bind(this));
         }
     }
@@ -89,7 +88,7 @@ export class Editor {
     }
     
     updateCodeChange() {
-        this.#callback(this.#editor.getValue(), this.#langage);
+        this.#callback();
     }
     
     /* ------ Event Listeners ------ */
