@@ -796,6 +796,34 @@ input[type="checkbox"]:checked {
   height: auto;
 }
 
+.h-\[20vh\] {
+  height: 20vh;
+}
+
+.h-\[60vh\] {
+  height: 60vh;
+}
+
+.h-\[15vh\] {
+  height: 15vh;
+}
+
+.h-\[65vh\] {
+  height: 65vh;
+}
+
+.h-\[18vh\] {
+  height: 18vh;
+}
+
+.h-\[62vh\] {
+  height: 62vh;
+}
+
+.h-\[6vh\] {
+  height: 6vh;
+}
+
 .min-h-screen {
   min-height: 100vh;
 }
@@ -971,6 +999,22 @@ input[type="checkbox"]:checked {
   border-width: 2px;
 }
 
+.border {
+  border-width: 1px;
+}
+
+.border-\[1px\] {
+  border-width: 1px;
+}
+
+.border-\[64px\] {
+  border-width: 64px;
+}
+
+.border-\[2px\] {
+  border-width: 2px;
+}
+
 .border-x-2 {
   border-left-width: 2px;
   border-right-width: 2px;
@@ -991,6 +1035,25 @@ input[type="checkbox"]:checked {
 .border-nightsky-light-dm {
   --tw-border-opacity: 1;
   border-color: rgb(61 63 91 / var(--tw-border-opacity));
+}
+
+.border-red-100 {
+  --tw-border-opacity: 1;
+  border-color: rgb(254 226 226 / var(--tw-border-opacity));
+}
+
+.border-black {
+  --tw-border-opacity: 1;
+  border-color: rgb(0 0 0 / var(--tw-border-opacity));
+}
+
+.border-nightsky-dark-dm {
+  --tw-border-opacity: 1;
+  border-color: rgb(21 25 49 / var(--tw-border-opacity));
+}
+
+.border-\[px\] {
+  border-color: px;
 }
 
 .bg-gray-100 {
@@ -1026,6 +1089,11 @@ input[type="checkbox"]:checked {
 .bg-white {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+
+.bg-red-400 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(248 113 113 / var(--tw-bg-opacity));
 }
 
 .fill-nightsky-regular-dm {

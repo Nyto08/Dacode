@@ -57,21 +57,21 @@ $navbar = ob_get_clean();
             <div>
               <span class="border-none outline-none">HTML</span>
             </div>
-            <div id="editor-area-html" class="editor flex-1"></div>
+            <div id="editor-area-html" class="editor flex-1 border-2 border-nightsky-light-dm"></div>
           </div>
 
           <div class="flex flex-1 flex-col">
             <div>
               <span class="border-none outline-none">CSS</span>
             </div>
-            <div id="editor-area-css" class="editor flex-1"></div>
+            <div id="editor-area-css" class="editor flex-1 border-2 border-nightsky-light-dm"></div>
           </div>
 
           <div class="flex flex-1 flex-col">
             <div>
               <span class="border-none outline-none">JavaScript</span>
             </div>
-            <div id="editor-area-javascript" class="editor flex-1"></div>
+            <div id="editor-area-javascript" class="editor flex-1 border-2 border-nightsky-light-dm"></div>
           </div>
 
         </div>
