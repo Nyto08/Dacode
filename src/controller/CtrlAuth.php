@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 namespace dacode\controller;
-use dacode\dao\DaoPedacode;
+use dacode\dao\DaoDacode;
 use dacode\metier\UserProfile;
 
 class CtrlAuth {
@@ -31,9 +31,9 @@ class CtrlAuth {
         return $this->msg;
     }
 
-    public function connectUserAccount($pseudo, $password, DaoPedacode $dao = null): bool {
+    public function connectUserAccount($pseudo, $password, DaoDacode $dao = null): bool {
         if ($dao === null) {
-            $dao = new DaoPedacode();
+            $dao = new DaoDacode();
         }
 
         // fields check step
@@ -74,9 +74,9 @@ class CtrlAuth {
         return isset($_SESSION['is-logged']);
     }
 
-    public function createUserAccount($pseudo, $email, $password, DaoPedacode $dao = null, $enableLogin = false): bool {
+    public function createUserAccount($pseudo, $email, $password, DaoDacode $dao = null, $enableLogin = false): bool {
         if ($dao === null) {
-            $dao = new DaoPedacode();
+            $dao = new DaoDacode();
         }
 
         if ($this->validateCreateUserForm($pseudo, $email, $password, $dao)) {
@@ -164,7 +164,7 @@ class CtrlAuth {
 
     public function getLoggedUser($dao = null): ?UserProfile {
         if ($dao === null) {
-            $dao = new DaoPedacode();
+            $dao = new DaoDacode();
         }
 
         if (isset($_SESSION['is-logged'])) {
@@ -186,9 +186,9 @@ class CtrlAuth {
         return $user;
     }
 
-    public function cleanUserFantom(string $pseudo, DaoPedacode $dao = null): void {
+    public function cleanUserFantom(string $pseudo, DaoDacode $dao = null): void {
         if ($dao === null) {
-            $dao = new DaoPedacode();
+            $dao = new DaoDacode();
         }
         $dao->deleteUserAccountByPseudo($pseudo);
     }
