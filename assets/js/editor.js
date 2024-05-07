@@ -10,10 +10,7 @@
 
 export class Editor {
     #editor;
-    #callback;
-    
-    // contient le code présent par defaut (quand l'utilisateur arrive sur la page ceci sera chargé)
-    #placeholderCode;
+    #updateCodeCallback;
     #langage;
 
     static codeChangeUpdateTimer = 500; // 0.8sec after code change -> update render
@@ -30,9 +27,9 @@ export class Editor {
     };
 
     // nodeIdToAttach = node ou attacher l'éditeur et callback = la fonction qui recevra le contenu de l'editeur
-    constructor(nodeIdToAttach, langage = this.syntaxMode["html"], callback = null, enableAutoCompletion = false, wrapEnabled = false) {
+    constructor(nodeIdToAttach, langage = this.syntaxMode["html"], updateCallback = null, enableAutoCompletion = false, wrapEnabled = false) {
         this.#editor = ace.edit(nodeIdToAttach);
-        this.#callback = callback;
+        this.#updateCodeCallback = updateCallback;
     
         // setup editor
         this.#editor.setTheme(Editor.defaultTheme);
@@ -48,19 +45,14 @@ export class Editor {
             fontSize: window.getComputedStyle(document.documentElement).fontSize
         });
     
-        this.#editor.getSession().setValue(this.#placeholderCode);
-    
         // render to the iframe if provided
-        if (this.#callback !== null) {
+        if (this.#updateCodeCallback !== null) {
             this.#editor.getSession().on("change", this.onCodeChange.bind(this));
         }
     }
-    
-    set placeholderCode(code) { this.#placeholderCode = code }
 
     get editor() { return this.#editor }
-    get callback() { return this.#callback }
-    get placeholderCode() { return this.#placeholderCode }
+    get callback() { return this.#updateCodeCallback }
 
 
     setLangage(langage) {
@@ -78,7 +70,7 @@ export class Editor {
         return Editor.syntaxMode[this.#langage];
     }
 
-    setCodeToPlaceholder() { this.#editor.setValue(this.#placeholderCode) }
+    getDataCode() { this.#editor.getSession().getValue() }
 
     clearEditor() { this.#editor.setValue('') }
 
@@ -87,16 +79,12 @@ export class Editor {
         this.#editor.destroy();
     }
     
-    updateCodeChange() {
-        this.#callback();
-    }
-    
     /* ------ Event Listeners ------ */
     
     onCodeChange() {
         // will wait until the user has stopped typing for some time then call updateCodeChange()
         clearTimeout(Editor.codeChangeUpdateTimeout);
-        Editor.codeChangeUpdateTimeout = setTimeout((() => { this.updateCodeChange() }), Editor.codeChangeUpdateTimer);
+        Editor.codeChangeUpdateTimeout = setTimeout((() => { this.#updateCodeCallback() }), Editor.codeChangeUpdateTimer);
     }
 }
 
