@@ -13,7 +13,7 @@ use dacode\metier\Langage;
 use dacode\metier\UserProfile;
 use dacode\metier\Subscription;
 
-class DaoPedacode
+class DaoDacode
 {
     private \PDO $conn;
 
@@ -22,7 +22,7 @@ class DaoPedacode
         try {
             $this->conn = Database::getConnection();
         } catch (\Exception $e) {
-            throw new \Exception('Exception DaoPedacode - constructor : ' .  $e->getMessage());
+            throw new \Exception('Exception DaoDacode - constructor : ' .  $e->getMessage());
         }
     }
 

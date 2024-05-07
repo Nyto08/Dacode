@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace dacode\controller;
 
-use dacode\dao\DaoPedacode;
+use dacode\dao\DaoDacode;
 use dacode\controller\Message;
 use dacode\controller\CtrlAuth;
 use dacode\metier\DataCode;
@@ -18,7 +18,7 @@ class CtrlDacode
     public const EMPTY_SLOT = "- Emplacement vide -";
 
     public function __construct(
-        private DaoPedacode $daoPedacode = new DaoPedacode(),
+        private DaoDacode $daoPedacode = new DaoDacode(),
     ) {
     }
 
