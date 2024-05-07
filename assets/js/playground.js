@@ -77,12 +77,6 @@ function setEditorData(dataJson) {
 }
 
 function updateEditorData() {
-    /* !!! Pas de sécurité avec le code saisi, donc du code malveillant peut être exécuté,
-    ici le CSP (content security policy) est utilisé pour minimiser les problèmes mais cela
-    ne suffit pas contre des attaques XSS par exemple, enfin à partir d'ici plusieurs pistes
-    sont envisageables comme l'utilisation de bibliothèques puis des checks avant
-    de stocker dans la base de données. */
-
     renderFrame.setAttribute("srcdoc",
     `<!DOCTYPE html>
     <html>
@@ -118,11 +112,31 @@ function requestSaveDataFromSlot(slotIndex) {
 
     // prep json data
     let data = {
-        code_data: liveEditors.editor.getValue(),
         name_workspace: inputSlot.value,
         slot_index: slotIndex,
-        langage_name: liveEditors.getLangageName(),
-        langage_extension: liveEditors.getLangageEditor()
+        editors: [
+            {
+                data_data: liveEditors[0].editor.getValue(),
+                langage: {
+                    name: liveEditors[0].getLangageName(),
+                    extension: liveEditors[0].getLangageEditor()
+                }
+            },
+            {
+                data_data: liveEditors[1].editor.getValue(),
+                langage: {
+                    name: liveEditors[1].getLangageName(),
+                    extension: liveEditors[1].getLangageEditor()
+                }
+            },
+            {
+                data_data: liveEditors[2].editor.getValue(),
+                langage: {
+                    name: liveEditors[2].getLangageName(),
+                    extension: liveEditors[2].getLangageEditor()
+                }
+            }
+        ]
     };
 
     // charge la fonction avec les paramètres (slotIndex, DataCode)

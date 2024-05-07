@@ -20,7 +20,7 @@ export class Editor {
     static codeChangeUpdateTimeout = 0; // store setTimeout
 
     static modePath = "ace/mode/";
-    static defaultTheme = "ace/theme/tomorrow_night_eighties";
+    static defaultTheme = "ace/theme/github_dark";
 
     // key/value : editor langage (editor SyntaxMode) / langage name
     static syntaxMode = {

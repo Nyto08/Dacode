@@ -61,14 +61,14 @@ $navbar = ob_get_clean();
           </div>
 
           <div class="flex flex-1 flex-col">
-            <div class="mt-2">
+            <div>
               <span class="border-none outline-none">CSS</span>
             </div>
             <div id="editor-area-css" class="editor flex-1"></div>
           </div>
 
           <div class="flex flex-1 flex-col">
-            <div class="mt-2">
+            <div>
               <span class="border-none outline-none">JavaScript</span>
             </div>
             <div id="editor-area-javascript" class="editor flex-1"></div>
