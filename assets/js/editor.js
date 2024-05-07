@@ -10,7 +10,7 @@
 
 export class Editor {
     #editor;
-    #iframeRenderNode;
+    #callback;
     
     // contient le code présent par defaut (quand l'utilisateur arrive sur la page ceci sera chargé)
     #placeholderCode;
@@ -29,10 +29,10 @@ export class Editor {
         "javascript": "JavaScript",
     };
 
-    // nodeIdToAttach = id de la div (sans le #) et iFrameNode = la référence du node (ce que retourne le querySelector)
-    constructor(nodeIdToAttach, langage = this.syntaxMode["html"], iFrameNode = null, enableAutoCompletion = false, wrapEnabled = false) {
+    // nodeIdToAttach = node ou attacher l'éditeur et callback = la fonction qui recevra le contenu de l'editeur
+    constructor(nodeIdToAttach, langage = this.syntaxMode["html"], callback = null, enableAutoCompletion = false, wrapEnabled = false) {
         this.#editor = ace.edit(nodeIdToAttach);
-        this.#iframeRenderNode = iFrameNode;
+        this.#callback = callback;
     
         // setup editor
         this.#editor.setTheme(Editor.defaultTheme);
@@ -51,7 +51,7 @@ export class Editor {
         this.#editor.getSession().setValue(this.#placeholderCode);
     
         // render to the iframe if provided
-        if (this.#iframeRenderNode !== null) {
+        if (this.#callback !== null) {
             this.updateCodeChange();
             this.#editor.getSession().on("change", this.onCodeChange.bind(this));
         }
@@ -60,7 +60,7 @@ export class Editor {
     set placeholderCode(code) { this.#placeholderCode = code }
 
     get editor() { return this.#editor }
-    get iframeRenderNode() { return this.#iframeRenderNode }
+    get callback() { return this.#callback }
     get placeholderCode() { return this.#placeholderCode }
 
 
@@ -89,23 +89,7 @@ export class Editor {
     }
     
     updateCodeChange() {
-        /* !!! Pas de sécurité avec le code saisi, donc du code malveillant peut être exécuté,
-        ici le CSP (content security policy) est utilisé pour minimiser les problèmes mais cela
-        ne suffit pas contre des attaques XSS par exemple, enfin à partir d'ici plusieurs pistes
-        sont envisageables comme l'utilisation de bibliothèques puis des checks avant
-        de stocker dans la base de données. */
-        this.#iframeRenderNode.setAttribute("srcdoc",
-        `<!DOCTYPE html>
-        <html>
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <meta http-equiv="Content-Security-Policy" content="default-src 'self; style-src 'self' 'unsafe-inline'">
-        </head>
-        <body>
-        ${this.#editor.getSession().getValue()}
-        </body>
-        </html>`);
+        this.#callback(this.#editor.getValue(), this.#langage);
     }
     
     /* ------ Event Listeners ------ */

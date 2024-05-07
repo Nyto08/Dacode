@@ -44,7 +44,7 @@ function init() {
         elem.addEventListener("change", onLangageChange);
     });
 
-    liveEditor = new Editor("editor-area", "html", renderFrame, true, true);
+    liveEditor = new Editor("editor-area", "html", updateEditorData, true, true);
 }
 
 function mountSaveModal() {
@@ -84,6 +84,26 @@ function setEditorData(dataJson) {
         liveEditor.setLangage(data[0]['langage']['extension']);
         liveEditor.editor.getSession().setValue(data[0]['code']);
     }
+}
+
+function updateEditorData(data, langage = "html") {
+    /* !!! Pas de sécurité avec le code saisi, donc du code malveillant peut être exécuté,
+    ici le CSP (content security policy) est utilisé pour minimiser les problèmes mais cela
+    ne suffit pas contre des attaques XSS par exemple, enfin à partir d'ici plusieurs pistes
+    sont envisageables comme l'utilisation de bibliothèques puis des checks avant
+    de stocker dans la base de données. */
+    renderFrame.setAttribute("srcdoc",
+    `<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self; style-src 'self' 'unsafe-inline'">
+    </head>
+        <body>
+        ${data}
+        </body>
+    </html>`);
 }
 
 function requestSaveDataFromSlot(slotIndex) {
