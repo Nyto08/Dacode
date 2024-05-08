@@ -163,6 +163,8 @@ function requestSaveDataFromSlot(slotIndex) {
 }
 
 function requestLoadDataFromSlot(slotIndex) {
+    if (selectUserSlots.children[slotIndex].innerText === TXT_EMPTY_SLOT) return;
+
     let xhr = new XMLHttpRequest();
     let dataJson;
 
@@ -188,6 +190,8 @@ function requestLoadDataFromSlot(slotIndex) {
 }
 
 function requestDeleteDataFromSlot(slotIndex) {
+    if (selectUserSlots.children[slotIndex].innerText === TXT_EMPTY_SLOT) return;
+
     let xhr = new XMLHttpRequest();
 
     xhr.onreadystatechange = function() {
