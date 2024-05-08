@@ -116,21 +116,21 @@ function requestSaveDataFromSlot(slotIndex) {
         slot_index: slotIndex,
         editors: [
             {
-                data_data: liveEditors[0].getDataCode(),
+                data_code: liveEditors[0].getDataCode(),
                 langage: {
                     name: liveEditors[0].getLangageName(),
                     extension: liveEditors[0].getLangageEditor()
                 }
             },
             {
-                data_data: liveEditors[1].getDataCode(),
+                data_code: liveEditors[1].getDataCode(),
                 langage: {
                     name: liveEditors[1].getLangageName(),
                     extension: liveEditors[1].getLangageEditor()
                 }
             },
             {
-                data_data: liveEditors[2].getDataCode(),
+                data_code: liveEditors[2].getDataCode(),
                 langage: {
                     name: liveEditors[2].getLangageName(),
                     extension: liveEditors[2].getLangageEditor()

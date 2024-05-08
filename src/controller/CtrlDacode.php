@@ -174,11 +174,24 @@ class CtrlDacode
         // is ajax
         if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
             header('Content-Type: application/json');
-            // json
-            // code_data: liveEditor.editor.getValue(),
-            // name_workspace: inputSlot.value,
-            // langage_name: liveEditor.getLangage(),
-            // langage_extension: liveEditor.getLangagePretty()
+            
+            // { json data format
+            //     name_workspace: inputSlot.value,
+            //     slot_index: slotIndex,
+            //     editors: [
+            //         {
+            //             data_code: liveEditors[0].getDataCode(),
+            //             langage: {
+            //                 name: liveEditors[0].getLangageName(),
+            //                 extension: liveEditors[0].getLangageEditor()
+            //             }
+            //         },
+            //         {
+            //             data_code: liveEditors[1].getDataCode(),
+            //             ... etc... jusqu'à 3 editeurs
+            //         },
+            //     ]
+            // }
 
             $workspaceData = json_decode($_POST['dataJson'], true);
             $slotIndex = isset($workspaceData['slot_index']) ? intval($workspaceData['slot_index']) : -1;
