@@ -103,7 +103,6 @@ function requestSaveDataFromSlot(slotIndex) {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             if (xhr.status === 200) {
                 // traitement des données
-                console.log(xhr.responseText);
                 let data = JSON.parse(xhr.responseText);
                 if (data !== null && data.name_workspace !== undefined) {
                     selectUserSlots.children[slotIndex].innerText = data.name_workspace;
@@ -153,8 +152,8 @@ function requestLoadDataFromSlot(slotIndex) {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             if (xhr.status === 200) {
                 // traitement des données
-                dataJson = xhr.responseText;
-                if (dataJson !== '') setEditorData(dataJson);
+                let dataJson = JSON.parse(xhr.responseText);
+                if (dataJson !== null) setEditorData(dataJson);
             } else {
                 console.error('Erreur lors du chargement des données utilisateur : ' + xhr.status);
             }
@@ -235,7 +234,7 @@ function onConfirmDataAction() {
 function onDeleteDataAction() {
     requestDeleteDataFromSlot(parseInt(selectUserSlots.value));
     
-    onCloseDataModal();
+    // onCloseDataModal();
 }
 
 // function onLangageChange(event) {

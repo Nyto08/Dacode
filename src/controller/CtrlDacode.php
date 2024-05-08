@@ -170,10 +170,10 @@ class CtrlDacode
             if (!is_numeric($slotIndex) || $slotIndex < 0 || $slotIndex > CtrlDacode::MAX_SAVE_SLOTS) {
                 throw new \Exception(Message::JSON_BAD_SLOT);
             }
-            $workspaceId = $this->daoPedacode->getPlaygWorkspaceByUserIdAndSlotNoCode($slotIndex, $user->getId());
+            $workspacePlay = $this->daoPedacode->getPlaygWorkspaceByUserIdAndSlotNoCode($slotIndex, $user->getId());
     
-            if ($workspaceId !== null) {
-                $this->daoPedacode->deletePlaygWorkspace($workspaceId);
+            if ($workspacePlay !== null) {
+                $this->daoPedacode->deletePlaygWorkspace($workspacePlay);
             }
     
             exit();
@@ -267,37 +267,6 @@ class CtrlDacode
                 'name_workspace' => $workspacePlayg->getName(),
             ]);
             exit();
-
-            // #################################################
-            // ######################OLD########################
-            // #################################################
-
-            // $langage = $this->daoPedacode->getLangageByName($workspaceData['langage_extension']);
-
-            // // le langage est invalide ou n'existe pas dans la bdd
-            // // if ($langage === null) { return ''; } // TODO : throw error
-
-            // $workspaceId = $this->daoPedacode->getPlaygWorkspaceIdByUserId($slotIndex, $_SESSION['id']);
-
-            // // current workspace is null, create it
-            // if ($workspaceId === null) {
-            //     $workspaceId = $this->daoPedacode->addPlaygWorkspace($_SESSION['id'], $workspaceData['name_workspace'], $slotIndex);
-            // }
-            // // Workspace exists, update name
-            // else {
-            //     $this->daoPedacode->updatePlaygWorkspaceName($workspaceId, $workspaceData['name_workspace']);
-            // }
-
-            // // delete all code from workspace byb id
-            // $this->daoPedacode->deleteCodeFromWorkspace($workspaceId);
-
-            // // insert new codes
-            // $dataCode = new DataCode($workspaceId, $workspaceData['code_data'], $langage);
-            // $this->daoPedacode->addCodeFromWorkspace($dataCode);
-
-            // // TODO : return date if there is no name
-            // echo $workspaceData['name_workspace'];
-            // exit();
         }
     }
 }
