@@ -121,7 +121,7 @@ class CtrlDacode
         $mappedWorkspaces = array_fill(0, CtrlDacode::MAX_SAVE_SLOTS, CtrlDacode::EMPTY_SLOT);
 
         if (isset($_SESSION['is-logged'])) {
-            $playgWorkspaces = $this->daoPedacode->getPlaygWorkspacesByUserId($_SESSION['id']);
+            $playgWorkspaces = $this->daoPedacode->getPlaygWorkspacesByUserIdNoCode($_SESSION['id']);
 
             // Met les workspaces dans l'ordre des emplacements
             foreach ($playgWorkspaces as $workspace) {
@@ -138,14 +138,22 @@ class CtrlDacode
         if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
             header('Content-Type: application/json');
 
+            // verify user
+            if (isset($_SESSION['is-logged'])) {
+                $user = $this->daoPedacode->getUserById($_SESSION['id']);
+            }
+            else {
+                throw new \Exception(Message::UNAUTHENTICATED_ERROR, 401);
+            }
+
             $slotIndex = isset($_GET['slotIndex']) ? intval($_GET['slotIndex']) : -1;
     
             if (!is_numeric($slotIndex) || $slotIndex < 0 || $slotIndex > CtrlDacode::MAX_SAVE_SLOTS) {
                 throw new \Exception(Message::JSON_BAD_SLOT);
             }
-            $dataCodeArr = $this->daoPedacode->getCodeFromPlaygSlot($slotIndex, $_SESSION['id']);
+            $workspacePlayg = $this->daoPedacode->getPlaygWorkspaceByUserIdAndSlotWithCode($slotIndex, $user->getId());
     
-            $encodedData = json_encode($dataCodeArr);
+            $encodedData = json_encode($workspacePlayg);
     
             echo $encodedData ? $encodedData : '';
             exit();
@@ -157,7 +165,7 @@ class CtrlDacode
         if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
             header('Content-Type: application/json');
 
-            // check for user infos
+            // verify user
             if (isset($_SESSION['is-logged'])) {
                 $user = $this->daoPedacode->getUserById($_SESSION['id']);
             }
@@ -200,7 +208,7 @@ class CtrlDacode
             //     ]
             // }
 
-            // check for user infos
+            // verify user
             if (isset($_SESSION['is-logged'])) {
                 $user = $this->daoPedacode->getUserById($_SESSION['id']);
             }

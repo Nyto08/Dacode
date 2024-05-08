@@ -5,7 +5,7 @@ namespace dacode\metier;
 use dacode\metier\DataCode;
 
 
-abstract class Workspace {
+abstract class Workspace implements \JsonSerializable {
     private int         $id;
     private ?array      $dataCodeArr;
     private string      $dateCrea;
@@ -20,9 +20,9 @@ abstract class Workspace {
 
     private function setId(int $newId) { $this->id = $newId; }
 
-    public function pushDataCode(?DataCode $dataCode): void {
-        $this->dataCodeArr[] = $dataCode;
-    }
+    // public function pushDataCode(?DataCode $dataCode): void {
+    //     $this->dataCodeArr[] = $dataCode;
+    // }
 
     public function setDataCodeArr(?array $dataCodeArr): void {
         $this->dataCodeArr = $dataCodeArr;
@@ -47,5 +47,14 @@ abstract class Workspace {
             . ', dateCrea=' . $this->dateCrea
             . ', dateModif=' . $this->dateModif
             . ']';
+    }
+
+    public function jsonSerialize(): mixed {
+        return [
+            // 'id' => $this->id,
+            'dataCodeArr' => $this->dataCodeArr,
+            'dateCrea' => $this->dateCrea,
+            'dateModif' => $this->dateModif
+        ];
     }
 }

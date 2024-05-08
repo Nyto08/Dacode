@@ -20,7 +20,7 @@ class WorkspacePlayground extends Workspace {
         $this->name = \htmlspecialchars(\substr($newName, 0, 20)); // TODO : si name length = 0 mettre la date de modif
     }
     private function setSlotIndex(int $newSlotIndex): void {
-        $this->slotIndex = $newSlotIndex; // TODO : limiter à 8
+        $this->slotIndex = $newSlotIndex;
     }
 
     public function getName(): string { return $this->name; }
@@ -32,5 +32,16 @@ class WorkspacePlayground extends Workspace {
             . ', slotIndex=' . $this->slotIndex
             . ', parent=' . $this
             . ']';
+    }
+
+    public function jsonSerialize(): mixed {
+        $parentData = parent::jsonSerialize();
+        return array_merge(
+            $parentData,
+            [
+                'name' => $this->name,
+                'slotIndex' => $this->slotIndex
+            ]
+        );
     }
 }

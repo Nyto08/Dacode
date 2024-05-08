@@ -66,14 +66,29 @@ function mountLoadModal() {
     if (!divInputSlot.classList.contains("hidden")) divInputSlot.classList.add("hidden");
 }
 
-function setEditorData(dataJson) {
-    let data = JSON.parse(dataJson);
+function setDataToEditor(data) {
 
-    // chaque index représente un éditeur, si il y a 3 index alors il y aura 3 éditeurs (par ex: html, css, js), pour le moment je charge que le 1er mais la bdd et tout le dao peuvent fonctionnent pour supporter plusieurs éditeurs sans problème.
-    if (typeof Object && data.length !== 0){
-        liveEditors.setLangage(data[0]['langage']['extension']);
-        liveEditors.editor.getSession().setValue(data[0]['code']);
-    }
+    /* une fois le workspace chargés avec le code et le langage associé,
+    trouver l'éditeur dans lequel insérer ces données, si aucun éditeur n'a le langage du json,
+    alors on change le langage de l'éditeur et on insère quand même le code. */
+    data[0].forEach(dataCode => {
+        let foundLangage = false;
+        let langage = dataCode['langage']['extension'];
+
+        // on cherche l'éditeur qui match le même langage que les données chargées.
+        liveEditors.forEach(editor => {
+            if (editor.getLangageEditor() === langage) {
+                editor.setDataCode(dataCode['code']);
+                foundLangage = true;
+            }
+        });
+
+        // si on ne l'a pas trouvé, on l'ajoute.
+        if (!foundLangage) {
+            liveEditors.setLangage(dataCode['langage']['extension']);
+            liveEditors.setDataCode(dataCode['code']);
+        }
+    });
 }
 
 function updateEditorData() {
@@ -152,8 +167,8 @@ function requestLoadDataFromSlot(slotIndex) {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             if (xhr.status === 200) {
                 // traitement des données
-                let dataJson = JSON.parse(xhr.responseText);
-                if (dataJson !== null) setEditorData(dataJson);
+                dataJson = JSON.parse(xhr.responseText);
+                if (dataJson !== null) setDataToEditor(dataJson);
             } else {
                 console.error('Erreur lors du chargement des données utilisateur : ' + xhr.status);
             }

@@ -16,7 +16,7 @@ class DataCode implements \JsonSerializable {
     }
 
     private function setCode(string $newCode) {
-        $this->code = $newCode; // TODO : protéger la bdd
+        $this->code = $newCode;
     }
     private function setId(int $newId) { $this->id = $newId; }
     public function setLangage(Langage $newLangage) { $this->langage = $newLangage; }
@@ -34,10 +34,10 @@ class DataCode implements \JsonSerializable {
     }
 
     public function jsonSerialize(): mixed {
-        return array(
-            'id' => $this->id,
+        return [
+            // 'id' => $this->id,
             'code' => $this->code,
             'langage' => $this->langage
-        );
+        ];
     }
 }

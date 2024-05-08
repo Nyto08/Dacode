@@ -78,7 +78,7 @@ $navbar = ob_get_clean();
 
         <div class="flex flex-col w-full h-[80vh]">
           <div>
-            <span class="border-none outline-none bg-nightsky-light-dm px-[3px] pb-1">Fenêtre de rendu</span>
+            <span class="border-none outline-none bg-nightsky-light-dm px-[3px] pb-1">Sortie</span>
           </div>
           <iframe id="output" class="h-full bg-slate-200 border-2 border-nightsky-light-dm" sandbox="allow-same-origin allow-scripts"></iframe>
         </div>

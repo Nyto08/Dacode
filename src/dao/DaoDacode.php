@@ -144,7 +144,7 @@ class DaoDacode
         }
     }
 
-    public function getPlaygWorkspacesByUserId(int $userId): ?array
+    public function getPlaygWorkspacesByUserIdNoCode(int $userId): ?array
     {
         $playgWorkspaces = [];
         $query = Requests::SELECT_PLAYG_WORKSPACES_BY_USER_ID;
@@ -166,29 +166,29 @@ class DaoDacode
         return $playgWorkspaces;
     }
 
-    public function getCodeFromPlaygSlot(int $slotIdx, int $userId): ?array
-    {
-        $dataCodeArr = [];
-        $query = Requests::SELECT_CODE_FROM_PLAYG_SLOT;
+    // public function getCodeFromPlaygSlot(int $slotIdx, int $userId): ?array
+    // {
+    //     $dataCodeArr = [];
+    //     $query = Requests::SELECT_CODE_FROM_PLAYG_SLOT;
 
-        try {
-            $statement = $this->conn->prepare($query);
-            $statement->bindValue(':slot_idx', $slotIdx, \PDO::PARAM_INT);
-            $statement->bindValue(':user_id', $userId, \PDO::PARAM_INT);
-            $statement->execute();
-            while ($row = $statement->fetch(\PDO::FETCH_OBJ)) {
-                $langage = new Langage($row->id_lang, $row->name_lang, $row->editor_lang);
-                $dataCode = new DataCode($row->id_wk, $row->data_cod, $langage);
-                $dataCodeArr[] = $dataCode;
-            }
-        } catch (\Exception $er) {
-            throw new \Exception($er->getMessage());
-        } catch (\Error $er) {
-            throw new \Error($er->getMessage());
-        }
+    //     try {
+    //         $statement = $this->conn->prepare($query);
+    //         $statement->bindValue(':slot_idx', $slotIdx, \PDO::PARAM_INT);
+    //         $statement->bindValue(':user_id', $userId, \PDO::PARAM_INT);
+    //         $statement->execute();
+    //         while ($row = $statement->fetch(\PDO::FETCH_OBJ)) {
+    //             $langage = new Langage($row->id_lang, $row->name_lang, $row->editor_lang);
+    //             $dataCode = new DataCode($row->id_wk, $row->data_cod, $langage);
+    //             $dataCodeArr[] = $dataCode;
+    //         }
+    //     } catch (\Exception $er) {
+    //         throw new \Exception($er->getMessage());
+    //     } catch (\Error $er) {
+    //         throw new \Error($er->getMessage());
+    //     }
 
-        return $dataCodeArr;
-    }
+    //     return $dataCodeArr;
+    // }
 
     public function addCodeToWorkspace(Workspace|WorkspacePlayground $workspace, Langage $langage, string $dataCode): void {
         $query = Requests::INSERT_CODE_IN_WORKSPACE;
@@ -263,9 +263,9 @@ class DaoDacode
         }
     }
 
-    // ne retourne pas le data code
+    // ne retourne pas le data code (voir plus bas)
     public function getPlaygWorkspaceByUserIdAndSlotNoCode(int $slotIdx, int $userId): ?WorkspacePlayground {
-        $query = Requests::SELECT_PLAYG_WORKSPACE_BY_USER_ID_AND_SLOT;
+        $query = Requests::SELECT_PLAYG_WORKSPACE_BY_USER_ID_AND_SLOT_NO_CODE;
 
         try {
             $statement = $this->conn->prepare($query);
@@ -278,6 +278,37 @@ class DaoDacode
             if ($row) {
                 $workspacePlayg = new WorkspacePlayground($row->id_wk, null, $row->crea_wk, $row->modif_wk, $row->name_wk, $row->slot_idx_wk);
             }
+            return $workspacePlayg;
+
+        } catch (\Exception $er) {
+            throw new \Exception($er->getMessage());
+        } catch (\Error $er) {
+            throw new \Error($er->getMessage());
+        }
+    }
+
+    public function getPlaygWorkspaceByUserIdAndSlotWithCode(int $slotIdx, int $userId): ?WorkspacePlayground {
+        $query = Requests::SELECT_PLAYG_WORKSPACE_BY_USER_ID_AND_SLOT_WITH_CODE;
+
+        try {
+            $statement = $this->conn->prepare($query);
+            $statement->bindValue(':slot_idx', $slotIdx, \PDO::PARAM_INT);
+            $statement->bindValue(':user_id', $userId, \PDO::PARAM_INT);
+            $statement->execute();
+
+            $workspacePlayg = null;
+            $dataCodeArr = [];
+            while($row = $statement->fetch(\PDO::FETCH_OBJ)) {
+                if ($workspacePlayg === null) {
+                    $workspacePlayg = new WorkspacePlayground($row->id_wk, null, $row->crea_wk, $row->modif_wk, $row->name_wk, $row->slot_idx_wk);
+                }
+
+                $langage = new Langage($row->id_lang, $row->name_lang, $row->editor_lang);
+                $dataCodeArr[] = new DataCode($row->id_cod, $row->data_cod, $langage);
+            }
+
+            $workspacePlayg->setDataCodeArr($dataCodeArr);
+
             return $workspacePlayg;
 
         } catch (\Exception $er) {
