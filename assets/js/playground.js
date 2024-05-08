@@ -68,10 +68,12 @@ function mountLoadModal() {
 
 function setDataToEditor(data) {
 
+    // clear each editor first
+    liveEditors.forEach(editor => editor.clearEditor());
+
     /* une fois le workspace chargés avec le code et le langage associé,
     trouver l'éditeur dans lequel insérer ces données, si aucun éditeur n'a le langage du json,
     alors on change le langage de l'éditeur et on insère quand même le code. */
-    // TODO : clearEditor()
     data.dataCodeArr.forEach(dataCode => {
         let foundLangage = false;
         let langage = dataCode.langage.extension;
