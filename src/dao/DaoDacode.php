@@ -7,6 +7,7 @@ namespace dacode\dao;
 use dacode\dao\Database;
 use dacode\dao\DaoException;
 use dacode\dao\Requests;
+use dacode\metier\Workspace;
 use dacode\metier\WorkspacePlayground;
 use dacode\metier\DataCode;
 use dacode\metier\Langage;
@@ -189,14 +190,14 @@ class DaoDacode
         return $dataCodeArr;
     }
 
-    public function addCodeFromWorkspace(DataCode $dataCode): void {
+    public function addCodeToWorkspace(Workspace|WorkspacePlayground $workspace, Langage $langage, string $dataCode): void {
         $query = Requests::INSERT_CODE_IN_WORKSPACE;
 
         try {
             $statement = $this->conn->prepare($query);
-            $statement->bindValue(':id_wk', $dataCode->getId(), \PDO::PARAM_INT);
-            $statement->bindValue(':id_lang', $dataCode->getLangage()->getId(), \PDO::PARAM_INT);
-            $statement->bindValue(':data_code', $dataCode->getCode(), \PDO::PARAM_STR);
+            $statement->bindValue(':id_wk', $workspace->getId(), \PDO::PARAM_INT);
+            $statement->bindValue(':id_lang', $langage->getId(), \PDO::PARAM_INT);
+            $statement->bindValue(':data_code', $dataCode, \PDO::PARAM_STR);
             $statement->execute();
         } catch (\Exception $er) {
             throw new \Exception($er->getMessage());
@@ -220,8 +221,7 @@ class DaoDacode
         }
     }
 
-    // crée un workspace (mode playground) et renvoie l'id de celui-ci
-    public function addPlaygWorkspace(int $userId, string $nameWk, int $slotIdx): ?int
+    public function addPlaygWorkspace(int $userId, string $nameWk, int $slotIdx): ?WorkspacePlayground
     {
         $query = Requests::FUNC_CREATE_PLAYG_WORKSPACE;
 
@@ -231,23 +231,30 @@ class DaoDacode
             $statement->bindValue(':name_wk', $nameWk, \PDO::PARAM_STR);
             $statement->bindValue(':slot_idx', $slotIdx, \PDO::PARAM_INT);
             $statement->execute();
+            
             $row = $statement->fetch(\PDO::FETCH_OBJ);
+            $workspacePlayg = null;
+            if ($row) {
+                $dateStr = (new \DateTime())->format('D M Y H:i:s');
+                $workspacePlayg = new WorkspacePlayground($row->id_wk, null, $dateStr, $dateStr, $nameWk, $slotIdx);
+            }
+
         } catch (\Exception $er) {
             throw new \Exception($er->getMessage());
         } catch (\Error $er) {
             throw new \Error($er->getMessage());
         }
 
-        return $row->id_wk ?? null;
+        return $workspacePlayg;
     }
 
-    public function deletePlaygWorkspace(int $idWk): void
+    public function deletePlaygWorkspace(Workspace|WorkspacePlayground $workspace): void
     {
         $query = Requests::DEL_PLAYG_WORKSPACE;
 
         try {
             $statement = $this->conn->prepare($query);
-            $statement->bindValue(':id_wk', $idWk, \PDO::PARAM_INT);
+            $statement->bindValue(':id_wk', $workspace->getId(), \PDO::PARAM_INT);
             $statement->execute();
         } catch (\Exception $er) {
             throw new \Exception($er->getMessage());
@@ -256,9 +263,8 @@ class DaoDacode
         }
     }
 
-    // renvoie l'id d'un workspace (pour le mode playground) si il existe
-    public function getPlaygWorkspaceIdByUserId(int $slotIdx, int $userId): ?int
-    {
+    // ne retourne pas le data code
+    public function getPlaygWorkspaceByUserIdAndSlotNoCode(int $slotIdx, int $userId): ?WorkspacePlayground {
         $query = Requests::SELECT_PLAYG_WORKSPACE_BY_USER_ID_AND_SLOT;
 
         try {
@@ -266,24 +272,29 @@ class DaoDacode
             $statement->bindValue(':slot_idx', $slotIdx, \PDO::PARAM_INT);
             $statement->bindValue(':user_id', $userId, \PDO::PARAM_INT);
             $statement->execute();
+
             $row = $statement->fetch(\PDO::FETCH_OBJ);
+            $workspacePlayg = null;
+            if ($row) {
+                $workspacePlayg = new WorkspacePlayground($row->id_wk, null, $row->crea_wk, $row->modif_wk, $row->name_wk, $row->slot_idx_wk);
+            }
+            return $workspacePlayg;
+
         } catch (\Exception $er) {
             throw new \Exception($er->getMessage());
         } catch (\Error $er) {
             throw new \Error($er->getMessage());
         }
-
-        return $row->id_wk ?? null;
     }
 
-    public function updatePlaygWorkspaceName(int $idWk, string $nameWk)
+    public function updatePlaygWorkspace(WorkspacePlayground $workpacePlayg)
     {
         $query = Requests::UPDATE_PLAYG_WORKSPACE_NAME;
 
         try {
             $statement = $this->conn->prepare($query);
-            $statement->bindValue(':id_wk', $idWk, \PDO::PARAM_INT);
-            $statement->bindValue(':name_wk', $nameWk, \PDO::PARAM_STR);
+            $statement->bindValue(':id_wk', $workpacePlayg->getId(), \PDO::PARAM_INT);
+            $statement->bindValue(':name_wk', $workpacePlayg->getName(), \PDO::PARAM_STR);
             $statement->execute();
         } catch (\Exception $er) {
             throw new \Exception($er->getMessage());
@@ -322,14 +333,17 @@ class DaoDacode
             $statement->bindValue(':name_lang', $nameLang, \PDO::PARAM_STR);
             $statement->execute();
             $row = $statement->fetch(\PDO::FETCH_OBJ);
-            $langage = new Langage($row->id_lang, $row->name_lang, $row->editor_lang);
+            $langage = null;
+            if ($row) {
+                $langage = new Langage($row->id_lang, $row->name_lang, $row->editor_lang);
+            }
+            return $langage;
+            
         } catch (\Exception $er) {
             throw new \Exception($er->getMessage());
         } catch (\Error $er) {
             throw new \Error($er->getMessage());
         }
-
-        return $langage;
     }
 
     public function getLangageById(int $idLang)

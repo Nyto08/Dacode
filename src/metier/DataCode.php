@@ -15,10 +15,10 @@ class DataCode implements \JsonSerializable {
         $this->setLangage($langage);
     }
 
-    public function setCode(string $newCode) {
+    private function setCode(string $newCode) {
         $this->code = $newCode; // TODO : protéger la bdd
     }
-    public function setId(int $newId) { $this->id = $newId; }
+    private function setId(int $newId) { $this->id = $newId; }
     public function setLangage(Langage $newLangage) { $this->langage = $newLangage; }
 
     public function getCode(): string { return $this->code; }

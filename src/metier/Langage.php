@@ -15,15 +15,15 @@ class Langage implements \JsonSerializable
     ) {
     }
 
-    public function setId(int $newId)
+    private function setId(int $newId)
     {
         $this->id = $newId;
     }
-    public function setName(string $newname)
+    private function setName(string $newname)
     {
         $this->name = $newname;
     }
-    public function setExtension(string $newExtension)
+    private function setExtension(string $newExtension)
     {
         $this->extension = $newExtension;
     }

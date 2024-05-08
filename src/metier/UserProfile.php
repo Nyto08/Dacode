@@ -27,14 +27,14 @@ class UserProfile {
         $this->setSubscription($subscription);
     }
 
-    public function setId(int $id) { $this->id = $id; }
-    public function setMail(string $mail) { $this->mail = $mail; }
-    public function setPseudo(string $pseudo) { $this->pseudo = $pseudo; }
-    public function setHashedPassword(string $hashPwd) { $this->hashPwd = $hashPwd; }
-    public function setDateSub(?string $date_sub) { $this->date_sub = $date_sub; }
-    public function setDateCreation(string $date_creation) { $this->date_creation = $date_creation; }
-    public function setRole(string $role) { $this->role = $role; }
-    public function setSubscription(Subscription $subscription) { $this->subscription = $subscription; }
+    private function setId(int $id) { $this->id = $id; }
+    private function setMail(string $mail) { $this->mail = $mail; }
+    private function setPseudo(string $pseudo) { $this->pseudo = $pseudo; }
+    private function setHashedPassword(string $hashPwd) { $this->hashPwd = $hashPwd; }
+    private function setDateSub(?string $date_sub) { $this->date_sub = $date_sub; }
+    private function setDateCreation(string $date_creation) { $this->date_creation = $date_creation; }
+    private function setRole(string $role) { $this->role = $role; }
+    private function setSubscription(Subscription $subscription) { $this->subscription = $subscription; }
 
     public function getId(): int { return $this->id; }
     public function getMail(): string { return $this->mail; }

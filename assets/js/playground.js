@@ -103,7 +103,11 @@ function requestSaveDataFromSlot(slotIndex) {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             if (xhr.status === 200) {
                 // traitement des données
-                selectUserSlots.children[slotIndex].innerText = xhr.responseText;
+                console.log(xhr.responseText);
+                let data = JSON.parse(xhr.responseText);
+                if (data !== null && data.name_workspace !== undefined) {
+                    selectUserSlots.children[slotIndex].innerText = data.name_workspace;
+                }
             } else {
                 console.error('Erreur lors de la sauvegarde des données utilisateur : ' + xhr.status);
             }
@@ -117,24 +121,15 @@ function requestSaveDataFromSlot(slotIndex) {
         editors: [
             {
                 data_code: liveEditors[0].getDataCode(),
-                langage: {
-                    name: liveEditors[0].getLangageName(),
-                    extension: liveEditors[0].getLangageEditor()
-                }
+                langage_name: liveEditors[0].getLangageName()
             },
             {
                 data_code: liveEditors[1].getDataCode(),
-                langage: {
-                    name: liveEditors[1].getLangageName(),
-                    extension: liveEditors[1].getLangageEditor()
-                }
+                langage_name: liveEditors[1].getLangageName()
             },
             {
                 data_code: liveEditors[2].getDataCode(),
-                langage: {
-                    name: liveEditors[2].getLangageName(),
-                    extension: liveEditors[2].getLangageEditor()
-                }
+                langage_name: liveEditors[2].getLangageName()
             }
         ]
     };

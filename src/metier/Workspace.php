@@ -7,21 +7,25 @@ use dacode\metier\DataCode;
 
 abstract class Workspace {
     private int         $id;
-    private ?array      $dataCode; // plus tard : array of DataCode (par exemple s'il y a un éditeur avec plusieurs langages)
+    private ?array      $dataCodeArr;
     private string      $dateCrea;
     private string      $dateModif;
 
-    public function __construct(int $id, ?DataCode $dataCode, string $dateCrea, string $dateModif) {
+    public function __construct(int $id, ?array $dataCodeArr, string $dateCrea, string $dateModif) {
         $this->setId($id);
-        $this->setDataCode($dataCode);
+        $this->setDataCodeArr($dataCodeArr);
         $this->setDateCrea($dateCrea);
         $this->setDateModif($dateModif);
     }
 
-    public function setId(int $newId) { $this->id = $newId; }
+    private function setId(int $newId) { $this->id = $newId; }
 
-    public function setDataCode(?array $newDataCode): void {
-        $this->dataCode = $newDataCode;
+    public function pushDataCode(?DataCode $dataCode): void {
+        $this->dataCodeArr[] = $dataCode;
+    }
+
+    public function setDataCodeArr(?array $dataCodeArr): void {
+        $this->dataCodeArr = $dataCodeArr;
     }
 
     private function setDateCrea(string $newDateCrea): void {
@@ -32,14 +36,14 @@ abstract class Workspace {
     }
 
     public function getId(): int { return $this->id; }
-    public function getDataCode(): ?array { return $this->dataCode; }
+    public function getDataCodeArr(): ?array { return $this->dataCodeArr; }
     public function getDateCrea(): string { return $this->dateCrea; }
     public function getDatModif(): string { return $this->dateModif; }
 
     public function __toString(): string {
         return '[' . self::class
             . ': id=' . $this->id
-            . ', dataCode=' . $this->dataCode
+            . ', dataCodeArr=' . $this->dataCodeArr
             . ', dateCrea=' . $this->dateCrea
             . ', dateModif=' . $this->dateModif
             . ']';
