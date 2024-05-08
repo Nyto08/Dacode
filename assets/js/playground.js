@@ -71,22 +71,23 @@ function setDataToEditor(data) {
     /* une fois le workspace chargés avec le code et le langage associé,
     trouver l'éditeur dans lequel insérer ces données, si aucun éditeur n'a le langage du json,
     alors on change le langage de l'éditeur et on insère quand même le code. */
-    data[0].forEach(dataCode => {
+    // TODO : clearEditor()
+    data.dataCodeArr.forEach(dataCode => {
         let foundLangage = false;
-        let langage = dataCode['langage']['extension'];
+        let langage = dataCode.langage.extension;
 
         // on cherche l'éditeur qui match le même langage que les données chargées.
         liveEditors.forEach(editor => {
             if (editor.getLangageEditor() === langage) {
-                editor.setDataCode(dataCode['code']);
+                editor.setDataCode(dataCode.code);
                 foundLangage = true;
             }
         });
 
         // si on ne l'a pas trouvé, on l'ajoute.
         if (!foundLangage) {
-            liveEditors.setLangage(dataCode['langage']['extension']);
-            liveEditors.setDataCode(dataCode['code']);
+            liveEditors.setLangage(dataCode.langage.extension);
+            liveEditors.setDataCode(dataCode.code);
         }
     });
 }

@@ -17,7 +17,7 @@ class WorkspacePlayground extends Workspace {
     }
 
     private function setName(string $newName): void {
-        $this->name = \htmlspecialchars(\substr($newName, 0, 20)); // TODO : si name length = 0 mettre la date de modif
+        $this->name = \htmlspecialchars(\substr($newName, 0, 20));
     }
     private function setSlotIndex(int $newSlotIndex): void {
         $this->slotIndex = $newSlotIndex;

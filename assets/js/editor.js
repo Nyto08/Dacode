@@ -64,16 +64,18 @@ export class Editor {
             console.error(`Langage : '${langage}' non supporté.`);
         }
     }
+
+    setDataCode(data) { this.#editor.getSession().setValue(data) }
+
     getLangageEditor() { return this.#langage }
 
     getLangageName() {
         return Editor.syntaxMode[this.#langage];
     }
 
-    setDataCode() { return this.#editor.getSession().setValue() }
     getDataCode() { return this.#editor.getSession().getValue() }
 
-    clearEditor() { this.#editor.setValue('') }
+    clearEditor() { this.#editor.getSession().setValue('') }
 
     destroyEditor() {
         this.#editor.getSession().off("change", this.onCodeChange);
