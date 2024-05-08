@@ -307,7 +307,7 @@ class DaoDacode
                 $dataCodeArr[] = new DataCode($row->id_cod, $row->data_cod, $langage);
             }
 
-            $workspacePlayg->setDataCodeArr($dataCodeArr);
+            if ($workspacePlayg !== null) { $workspacePlayg->setDataCodeArr($dataCodeArr); }
 
             return $workspacePlayg;
 
