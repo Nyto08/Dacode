@@ -70,7 +70,7 @@ export class Editor {
         return Editor.syntaxMode[this.#langage];
     }
 
-    getDataCode() { this.#editor.getSession().getValue() }
+    getDataCode() { return this.#editor.getSession().getValue() }
 
     clearEditor() { this.#editor.setValue('') }
 

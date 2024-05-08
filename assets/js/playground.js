@@ -85,12 +85,12 @@ function updateEditorData() {
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
         <body>
-        ${liveEditors[0].editor.getSession().getValue()}
+        ${liveEditors[0].getDataCode()}
         <style>
-        ${liveEditors[1].editor.getSession().getValue()}
+        ${liveEditors[1].getDataCode()}
         </style>
         <script>
-        ${liveEditors[2].editor.getSession().getValue()}
+        ${liveEditors[2].getDataCode()}
         </script>
         </body>
     </html>`);
