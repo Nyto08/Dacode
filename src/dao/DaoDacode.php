@@ -175,9 +175,9 @@ class DaoDacode
         }
     }
 
-    public function addPlaygWorkspace(int $userId, string $nameWk, int $slotIdx): ?WorkspacePlayground
-    {
+    public function addPlaygWorkspace(int $userId, string $nameWk, int $slotIdx): ?WorkspacePlayground {
         $query = Requests::FUNC_CREATE_PLAYG_WORKSPACE;
+        $workspacePlayg = null;
 
         try {
             $statement = $this->conn->prepare($query);
@@ -187,23 +187,20 @@ class DaoDacode
             $statement->execute();
             
             $row = $statement->fetch(\PDO::FETCH_OBJ);
-            $workspacePlayg = null;
             if ($row) {
                 $dateStr = (new \DateTime())->format('D M Y H:i:s');
                 $workspacePlayg = new WorkspacePlayground($row->id_wk, null, $dateStr, $dateStr, $nameWk, $slotIdx);
             }
+            return $workspacePlayg;
 
         } catch (\Exception $er) {
             throw new \Exception($er->getMessage());
         } catch (\Error $er) {
             throw new \Error($er->getMessage());
         }
-
-        return $workspacePlayg;
     }
 
-    public function deletePlaygWorkspace(Workspace|WorkspacePlayground $workspace): void
-    {
+    public function deletePlaygWorkspace(Workspace|WorkspacePlayground $workspace): void {
         $query = Requests::DEL_PLAYG_WORKSPACE;
 
         try {
