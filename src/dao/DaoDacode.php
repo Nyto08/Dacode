@@ -144,52 +144,6 @@ class DaoDacode
         }
     }
 
-    public function getPlaygWorkspacesByUserIdNoCode(int $userId): ?array
-    {
-        $playgWorkspaces = [];
-        $query = Requests::SELECT_PLAYG_WORKSPACES_BY_USER_ID;
-
-        try {
-            $statement = $this->conn->prepare($query);
-            $statement->bindValue(1, $userId, \PDO::PARAM_INT);
-            $statement->execute();
-            while ($row = $statement->fetch(\PDO::FETCH_OBJ)) {
-                $newPlaygWorkspace = new WorkspacePlayground($row->id_wk, null, $row->crea_wk, $row->modif_wk, $row->name_wk, $row->slot_idx_wk);
-                $playgWorkspaces[] = $newPlaygWorkspace;
-            }
-        } catch (\Exception $er) {
-            throw new \Exception($er->getMessage());
-        } catch (\Error $er) {
-            throw new \Error($er->getMessage());
-        }
-
-        return $playgWorkspaces;
-    }
-
-    // public function getCodeFromPlaygSlot(int $slotIdx, int $userId): ?array
-    // {
-    //     $dataCodeArr = [];
-    //     $query = Requests::SELECT_CODE_FROM_PLAYG_SLOT;
-
-    //     try {
-    //         $statement = $this->conn->prepare($query);
-    //         $statement->bindValue(':slot_idx', $slotIdx, \PDO::PARAM_INT);
-    //         $statement->bindValue(':user_id', $userId, \PDO::PARAM_INT);
-    //         $statement->execute();
-    //         while ($row = $statement->fetch(\PDO::FETCH_OBJ)) {
-    //             $langage = new Langage($row->id_lang, $row->name_lang, $row->editor_lang);
-    //             $dataCode = new DataCode($row->id_wk, $row->data_cod, $langage);
-    //             $dataCodeArr[] = $dataCode;
-    //         }
-    //     } catch (\Exception $er) {
-    //         throw new \Exception($er->getMessage());
-    //     } catch (\Error $er) {
-    //         throw new \Error($er->getMessage());
-    //     }
-
-    //     return $dataCodeArr;
-    // }
-
     public function addCodeToWorkspace(Workspace|WorkspacePlayground $workspace, Langage $langage, string $dataCode): void {
         $query = Requests::INSERT_CODE_IN_WORKSPACE;
 
@@ -263,9 +217,31 @@ class DaoDacode
         }
     }
 
+    public function getPlaygWorkspacesByUserIdNoCode(int $userId): ?array {
+        $query = Requests::SELECT_PLAYG_WORKSPACES_BY_USER_ID;
+        $playgWorkspaces = [];
+
+        try {
+            $statement = $this->conn->prepare($query);
+            $statement->bindValue(1, $userId, \PDO::PARAM_INT);
+            $statement->execute();
+            while ($row = $statement->fetch(\PDO::FETCH_OBJ)) {
+                $newPlaygWorkspace = new WorkspacePlayground($row->id_wk, null, $row->crea_wk, $row->modif_wk, $row->name_wk, $row->slot_idx_wk);
+                $playgWorkspaces[] = $newPlaygWorkspace;
+            }
+            return $playgWorkspaces;
+
+        } catch (\Exception $er) {
+            throw new \Exception($er->getMessage());
+        } catch (\Error $er) {
+            throw new \Error($er->getMessage());
+        }
+    }
+
     // ne retourne pas le data code (voir plus bas)
     public function getPlaygWorkspaceByUserIdAndSlotNoCode(int $slotIdx, int $userId): ?WorkspacePlayground {
         $query = Requests::SELECT_PLAYG_WORKSPACE_BY_USER_ID_AND_SLOT_NO_CODE;
+        $workspacePlayg = null;
 
         try {
             $statement = $this->conn->prepare($query);
@@ -274,7 +250,6 @@ class DaoDacode
             $statement->execute();
 
             $row = $statement->fetch(\PDO::FETCH_OBJ);
-            $workspacePlayg = null;
             if ($row) {
                 $workspacePlayg = new WorkspacePlayground($row->id_wk, null, $row->crea_wk, $row->modif_wk, $row->name_wk, $row->slot_idx_wk);
             }
@@ -289,6 +264,8 @@ class DaoDacode
 
     public function getPlaygWorkspaceByUserIdAndSlotWithCode(int $slotIdx, int $userId): ?WorkspacePlayground {
         $query = Requests::SELECT_PLAYG_WORKSPACE_BY_USER_ID_AND_SLOT_WITH_CODE;
+        $workspacePlayg = null;
+        $dataCodeArr = [];
 
         try {
             $statement = $this->conn->prepare($query);
@@ -296,8 +273,6 @@ class DaoDacode
             $statement->bindValue(':user_id', $userId, \PDO::PARAM_INT);
             $statement->execute();
 
-            $workspacePlayg = null;
-            $dataCodeArr = [];
             while($row = $statement->fetch(\PDO::FETCH_OBJ)) {
                 if ($workspacePlayg === null) {
                     $workspacePlayg = new WorkspacePlayground($row->id_wk, null, $row->crea_wk, $row->modif_wk, $row->name_wk, $row->slot_idx_wk);
@@ -318,8 +293,7 @@ class DaoDacode
         }
     }
 
-    public function updatePlaygWorkspace(WorkspacePlayground $workpacePlayg)
-    {
+    public function updatePlaygWorkspace(WorkspacePlayground $workpacePlayg) {
         $query = Requests::UPDATE_PLAYG_WORKSPACE_NAME;
 
         try {
@@ -334,8 +308,7 @@ class DaoDacode
         }
     }
     
-    public function getLangages(): ?array
-    {
+    public function getLangages(): ?array {
         $langages = [];
         $query = Requests::SELECT_LANGAGES;
 
@@ -355,8 +328,7 @@ class DaoDacode
         return $langages;
     }
 
-    public function getLangageByName(string $nameLang): ?Langage
-    {
+    public function getLangageByName(string $nameLang): ?Langage {
         $query = Requests::SELECT_LANGAGE_BY_NAME;
 
         try {
@@ -377,8 +349,7 @@ class DaoDacode
         }
     }
 
-    public function getLangageById(int $idLang)
-    {
+    public function getLangageById(int $idLang) {
         $query = Requests::SELECT_LANGAGE_BY_ID;
 
         try {
@@ -397,8 +368,7 @@ class DaoDacode
         }
     }
 
-    public function updateLangage(Langage $langage)
-    {
+    public function updateLangage(Langage $langage) {
         $query = Requests::UPDATE_LANGAGE;
 
         try {
@@ -413,8 +383,7 @@ class DaoDacode
             throw new \Error($er->getMessage());
         }
     }
-    public function addLangage(Langage $langage)
-    {
+    public function addLangage(Langage $langage) {
         $query = Requests::INSERT_LANGAGE;
 
         try {
@@ -430,8 +399,7 @@ class DaoDacode
         }
     }
 
-    public function delLangage(int $idLang)
-    {
+    public function delLangage(int $idLang) {
         $query = Requests::DELETE_LANGAGE;
 
         try {
