@@ -2,8 +2,6 @@
 Une web app pour coder dans le navigateur.\
 Comprend essentiellement un mode playground pour coder (HTML, CSS et JavaScript) avec une fenêtre de sortie, possède aussi un système de routage et d'authentification basique utilisateur.
 
-## Screenshots
-
 ![App Screenshot](/playground_showcase2.png?raw=true "playground")
 
 
