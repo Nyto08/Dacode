@@ -152,7 +152,7 @@ function requestSaveDataFromSlot(slotIndex) {
     };
 
     // charge la fonction avec les paramètres (slotIndex, DataCode)
-    let params = 'dataJson=' + JSON.stringify(data);
+    let params = 'dataJson=' + encodeURIComponent(JSON.stringify(data));
 
     // envoi la requête sur cette même page
     xhr.open('post', window.location.href + '/saveWorkspace', true);

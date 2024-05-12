@@ -7,7 +7,7 @@ class Requests {
     public const SELECT_PLAYG_WORKSPACE_BY_USER_ID_AND_SLOT_NO_CODE = "select workspace.id_wk, id_user, crea_wk, modif_wk, slot_idx_wk, name_wk from workspace inner join WkPlayg on workspace.id_wk = WkPlayg.id_wk where id_user = :user_id and slot_idx_wk = :slot_idx";
     public const SELECT_PLAYG_WORKSPACE_BY_USER_ID_AND_SLOT_WITH_CODE = "select workspace.id_wk, id_user, crea_wk, modif_wk, slot_idx_wk, name_wk, id_cod, data_cod, code.id_lang, name_lang, editor_lang from workspace inner join WkPlayg on workspace.id_wk = WkPlayg.id_wk inner join Code on workspace.id_wk = code.id_wk inner join Langage on code.id_lang = langage.id_lang where id_user = :user_id and slot_idx_wk = :slot_idx;";
     public const FUNC_CREATE_PLAYG_WORKSPACE = "select create_playg_workspace(:user_id, :name_wk, :slot_idx) as id_wk";
-    public const DEL_PLAYG_WORKSPACE = "delete from WkPlayg where id_wk = :id_wk";
+    public const DEL_PLAYG_WORKSPACE = "delete from workspace where id_wk = :id_wk";
     public const SELECT_CODE_FROM_PLAYG_SLOT = "select code.id_lang, code.id_wk, data_cod, name_lang, editor_lang, slot_idx_wk, id_user from code inner join workspace on code.id_wk = workspace.id_wk inner join WkPlayg on code.id_wk = WkPlayg.id_wk inner join langage on code.id_lang = langage.id_lang where slot_idx_wk = :slot_idx and id_user = :user_id";
     public const INSERT_CODE_IN_WORKSPACE = "insert into code (id_wk, id_lang, data_cod) values
     (:id_wk, :id_lang, :data_code)";
