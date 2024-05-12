@@ -26,4 +26,4 @@ Comprend essentiellement un mode playground pour coder (HTML, CSS et JavaScript)
 
 ## Pourquoi ce projet ?
 
-DaCode portait le nom de PedaCode à l'origine est devait être une app avec des cours sur le dev développé par moi et Aïmane Bougtaïb, le script sql contient encore cet héritage.
+DaCode ou plutôt PedaCode était à l'origine un projet développé par moi-même et Aïmane Bougtaïb, ça devait être une app avec des cours en ligne sur le développement web, le script SQL contient encore cet héritage.
